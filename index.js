@@ -7,7 +7,11 @@ firebase.auth().onAuthStateChanged(function(user) {
     user = firebase.auth().currentUser;
     document.getElementById("logowanie").style.display="none";
     document.getElementById("logout-btn").style.display="flex";
-    document.getElementById("signup-btn").style.visibility="none";
+    document.getElementById("signup-btn").style.display="none";
+    document.getElementById("q").style.display="none";
+    document.getElementById("myposts-btn").style.display="block";
+    document.getElementById("mypets-btn").style.display="block";
+
     if(user != null){
      
       var email_id = user.email;
@@ -18,8 +22,12 @@ firebase.auth().onAuthStateChanged(function(user) {
 
   } else {
     // No user is signed in.
+    document.getElementById("logowanie").style.display="block";
     document.getElementById("logout-btn").style.display="none";
-    document.getElementById("signup-btn").style.visibility="visible";
+    document.getElementById("signup-btn").style.display="block";
+    document.getElementById("q").style.display="block";
+    document.getElementById("myposts-btn").style.display="none";
+    document.getElementById("mypets-btn").style.display="none";
   }
 });
 
@@ -42,15 +50,14 @@ function login(){
 
 function logout(){
   firebase.auth().signOut();
+  //location.href("../index.html");
   location.reload();
 
 }
 
 
-
-
 function signupview(){
-  document.getElementById("rejestracja").style.visibility="visible";
+  document.getElementById("rejestracja").style.display="block";
 }
 function signUp(){
     var userEmail = document.getElementById("userEmail").value;
@@ -97,7 +104,8 @@ function signUp(){
             })
         });
         firebase.auth().signInWithEmailAndPassword(userEmail, userPassword)
-        document.getElementById("rejestracja").style.visibility="hidden";
+       // document.getElementById("rejestracja").style.display="none";
+location.reload();
     }
 //}
 
