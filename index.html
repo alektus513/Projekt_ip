@@ -27,7 +27,7 @@
               <span class="icon-bar"></span>
             </button>
             <!-- <a class="navbar-brand" href="#">ADPT</a> -->
-            <a><img src="pet.png" style="margin: 2px; background-color: rgba(244, 235, 239, 0.582); border-radius: 200px; width:50px; height: 50px;">
+            <a href="/"><img src="pet.png" style="margin: 2px; background-color: rgba(244, 235, 239, 0.582); border-radius: 200px; width:50px; height: 50px;">
             </a>
           </div>
       
@@ -38,10 +38,10 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li class="nav-item"> 
-                <a class="nav-link" href="#" id="mypets-btn">My pets</a>
+                <a class="nav-link" href="/mypets.html" id="mypets-btn">Moje zwierzęta</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#" id="myposts-btn">My posts</a>
+                <a class="nav-link" href="#" id="myposts-btn">Moje posty</a>
               </li>
                       
                 <li class="dropdown">
@@ -93,30 +93,31 @@
     <div style=" width: 100%; height: min-content;">
     <div id="rejestracja" class="signup-form" style="display: none;">
         <form>
-            <h2>Register</h2>
-            <p class="hint-text">Create your account. It's free and only takes a minute.</p>
+            <h2>Witaj!</h2>
+            <p class="hint-text">Stwórz darmowe konto.</p>
             <div class="form-group">
                 <div class="row">
-                    <div class="col-xs-6"><input type="text" class="form-control" name="first_name" placeholder="First Name" required="required"></div>
-                    <div class="col-xs-6"><input type="text" class="form-control" name="last_name" placeholder="Last Name" required="required"></div>
+                    <div class="col-xs-6"><input type="text" id="userName" class="form-control" name="first_name" placeholder="Imię" required="required"></div>
+                    <div class="col-xs-6"><input type="text" id="userLastname" class="form-control" name="last_name" placeholder="Nazwisko" required="required"></div>
                 </div>        	
             </div>
             <div class="form-group">
                 <input id="userEmail" type="email" class="form-control" name="email" placeholder="Email" required="required">
             </div>
             <div class="form-group">
-                <input id="userPassword" type="password" class="form-control" name="password" placeholder="Password" required="required">
+                <input id="userPassword" type="password" class="form-control" name="password" placeholder="Hasło" required="required">
             </div>
             <div class="form-group">
-                <input  type="password" class="form-control" name="confirm_password" placeholder="Confirm Password" required="required">
+                <input  type="password" class="form-control" name="confirm_password" placeholder="Potwierdź hasło" required="required">
             </div>        
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <label class="checkbox-inline"><input type="checkbox" required="required"> I accept the <a href="#">Terms of Use</a> &amp; <a href="#">Privacy Policy</a></label>
-            </div>
-            <div class="form-group">
-                <button onclick="signUp()"  class="btn btn-success btn-lg btn-block">Register Now</button>
-            </div>
+            </div> -->
+            <div>
+                </div>
         </form>
+        <button onclick="signUp()"  class="btn btn-success btn-lg btn-block">Zarejestruj się</button>
+            
         <!-- <div class="text-center">Already have an account? <a href="#">Sign in</a></div> -->
     </div>
   </div>
@@ -135,16 +136,16 @@
         <div style="width: 100%;"><hr></div>
         
         <div class="radio">
-          <label><input type="radio" name="optradio" ><span class="tag tag-teal">Dogs</span></label>
+          <label><input type="radio" name="optradio" ><span class="tag tag-teal">Psy</span></label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="optradio"><span class="tag tag-purple">Cats</span></label>
+          <label><input type="radio" name="optradio"><span class="tag tag-purple">Koty</span></label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="optradio" ><span class="tag tag-pink">Hamsters</span></label>
+          <label><input type="radio" name="optradio" ><span class="tag tag-pink">Gryzonie</span></label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="optradio" checked><span class="tag tag-gray">All</span></label>
+          <label><input type="radio" name="optradio" checked><span class="tag tag-gray">Wszystkie</span></label>
         </div>
       </div>
     </div>
@@ -157,7 +158,7 @@
         <img src="dog.JPG" alt="rover" />
       </div>
       <div class="card-body">
-        <span class="tag tag-teal">Dogs</span>
+        <span class="tag tag-teal">Psy</span>
         <h4>
           Przygarniesz Bruna?
         </h4>
@@ -178,7 +179,7 @@
         <img src="cat.jpg" alt="ballons" />
       </div>
       <div class="card-body">
-        <span class="tag tag-purple">Cats</span>
+        <span class="tag tag-purple">Koty</span>
         <h4>
           Puszek czeka na dom!
         </h4>
@@ -200,7 +201,7 @@
         <img src="hamster.jpg" alt="city" />
       </div>
       <div class="card-body">
-        <span class="tag tag-pink">Hamsters</span>
+        <span class="tag tag-pink">Gryzonie</span>
         <h4>
          Helenka
         </h4>
@@ -222,7 +223,7 @@
         <img src="hamster.jpg" alt="city" />
       </div>
       <div class="card-body">
-        <span class="tag tag-pink">Hamsters</span>
+        <span class="tag tag-pink">Gryzonie</span>
         <h4>
          Helenka
         </h4>
@@ -243,7 +244,7 @@
         <img src="hamster.jpg" alt="city" />
       </div>
       <div class="card-body">
-        <span class="tag tag-pink">Hamsters</span>
+        <span class="tag tag-pink">Gryzonie</span>
         <h4>
          Helenka
         </h4>
@@ -264,7 +265,7 @@
         <img src="hamster.jpg" alt="city" />
       </div>
       <div class="card-body">
-        <span class="tag tag-pink">Hamsters</span>
+        <span class="tag tag-pink">Gryzonie</span>
         <h4>
          Helenka
         </h4>
@@ -297,20 +298,49 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
 <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase-storage.js"></script>
 
  <script>
   // Initialize Firebase
   var config = {
-    apiKey: "AIzaSyBNeteUiC9EmhBpzJMNEPegmnzf1EiLQ1s",
-  authDomain: "adopt-a-pet-f01ca.firebaseapp.com",
-  databaseURL: "https://adopt-a-pet-f01ca-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "adopt-a-pet-f01ca",
-  storageBucket: "adopt-a-pet-f01ca.appspot.com",
-  messagingSenderId: "963004694042",
-  appId: "1:963004694042:web:633f46d8879b1780aa9ba3",
-  measurementId: "G-FJM9L2HPC5"
+  //   apiKey: "AIzaSyBNeteUiC9EmhBpzJMNEPegmnzf1EiLQ1s",
+  // authDomain: "adopt-a-pet-f01ca.firebaseapp.com",
+  // databaseURL: "https://adopt-a-pet-f01ca-default-rtdb.europe-west1.firebasedatabase.app",
+  // projectId: "adopt-a-pet-f01ca",
+  // storageBucket: "adopt-a-pet-f01ca.appspot.com",
+  // messagingSenderId: "963004694042",
+  // appId: "1:963004694042:web:633f46d8879b1780aa9ba3",
+  // measurementId: "G-FJM9L2HPC5"
+  apiKey: "AIzaSyC12TEpObCW-adZWPWo7fwONg99IXnhEo4",
+  authDomain: "adopt-a-pet2.firebaseapp.com",
+  databaseURL: "https://adopt-a-pet2-default-rtdb.firebaseio.com/",
+  projectId: "adopt-a-pet2",
+  storageBucket: "adopt-a-pet2.appspot.com",
+  messagingSenderId: "7865506719",
+  appId: "1:7865506719:web:ecf7682dadb3ea3e74fbaa"
 };
 var app = firebase.initializeApp(config);
 

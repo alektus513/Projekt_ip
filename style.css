@@ -29,12 +29,7 @@ body{
     border: 1px solid rgba(201,37,107,1); */
    
 }
-.dropdown{
-    
-    /* border-radius: 90px
-    border: 1px solid rgba(201,37,107,1); */
-    
-}
+
 .dropdown .dropdown-toggle:hover{
     backdrop-filter: blur(50px);
     background-color: rgba(201,37,107, 0.3);}
