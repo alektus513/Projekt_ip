@@ -45,6 +45,9 @@ width:100%;
     border-left: dashed 2px white;
     width: 100%;
 }
+.tab-pane .btn:focus{
+  outline: none;
+}
 .nav-tabs > li > a{
   border: medium none;
   color: black;
@@ -90,7 +93,7 @@ a:hover{
   color:white;
 }
   </style>
-  <body>
+  <body >
 
 <div class="header">
     <nav class="navbar navbar-default1"> <!-- navbar navbar-default -->
@@ -143,7 +146,7 @@ a:hover{
                         <button class="btn btn-default" id="signup-btn" onclick="signupview()">Zarejestruj się</button>
                       </li>
                       <li role="separator" class="divider"></li>
-                      <li><a href="/profile.html">Moje konto</a></li>
+                      <li id="mojekonto"><a href="/profile.html">Moje konto</a></li>
                      </ul>
                   </li>
               
@@ -159,14 +162,50 @@ a:hover{
         <div id="profil-cont" class="containerP">
       
           <div class="dane"> 
+            <div class="dropdown" style="border-radius: 5px; font-size: large; background-color:darkkhaki; padding: 4%;">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dodaj nowe zwierzę  <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                
+                <li>
+                  <div class="form" name="addpet"> 
+                    <form>
+                      <input class="form-control" id="petname" type="name" placeholder="Imię..."  />
+                      <div class="form-control form-check">
+                        <label class="form-check-label">
+                          <input value="psy" type="radio" >Psy 
+                        </label> <br>
+                        <label class="form-check-label">
+                          <input value="koty" type="radio" id="opt">Koty 
+                        </label><br>
+                      
+                        <label class="form-check-label">
+                          <input value="gryzonie" type="radio" >Gryzonie 
+                        </label><br>
+                     
+                        <label class="form-check-label">
+                          <input value="inne" type="radio" >Inne 
+                        </label>
+                      </div>
+                      
+                     
+                      </form>
+                      <button style="margin-left: 2%; margin-right: 2%; width: 96%;" onclick="dodajzwierze()" class="btn btn-default">Dodaj</button>
+
+                      </div>
+                      </li>
+                    </ul>
+              </div>
+            <button class="btn btn-default" style="margin-top: 2px; width: 100%; justify-content: center;" onclick="mojezwierzeta()">Pokaż wszystkie</button>
+            
+            <input style="display: none; margin-top: 2px; margin-bottom: 2px;" class="form-control" id="myPetsinput" type="text" placeholder="Szukaj..">
             <!-- <p style="height: 0px;" id="klucz"></p>  -->
-            <ul class="list-group list-group-flush">
-              <button class="list-group-item"><span class="tag tag-pink">Gryzonie</span>
+            <ul class="list-group list-group-flush" id="myPets">
+              <!-- <button class="list-group-item"><span class="tag tag-pink">Gryzonie</span>
                 <p>Helenka</p></button>
                <button class="list-group-item"><span class="tag tag-purple">Koty</span>
                 <p>Puszek</p></button>
                 <button class="list-group-item"><span class="tag tag-teal">Psy</span>
-                <p>Reks</p></button>
+                <p>Reks</p></button> -->
          </ul>
        
             
@@ -174,6 +213,7 @@ a:hover{
           
     
              <div class="nav1">
+               <div id="namediv" style="background-color: #8f8f8fc5; border-radius: 5px; padding: 1%; text-align: center;"></div>
               <ul class="nav nav-tabs nav-justified ">
                 <li class="active"><a data-toggle="tab" href="#ogolne">Informacje ogólne</a></li>
                 <li><a data-toggle="tab" href="#karta">Historia medyczna</a></li>
@@ -250,7 +290,19 @@ a:hover{
                    </form>
                    
                 </div>
-                <button id="zapisz_wywiad" class="btn btn-success">Zapisz</button>
+                <div style="padding-left: 1%;padding-right: 1%; display: flex; justify-content: space-between;">
+                  <button onclick="pokazhistmed()" class="btn btn-default">Pokaż poprzednie wpisy</button>
+                    
+                  <button id="zapisz_histmed" onclick="histmed()" class="btn btn-success">Zapisz</button>
+                </div>
+                <div id="poprzedniemed" style="display: none;">
+              <div style=" text-align: center; font-size: large;">
+                <hr>
+                Poprzednie wpisy</div>
+                <ul id="poprzedniemed-list">
+                <li>mb</li>
+              </ul>
+            </div>
               </div>
                 
               <div id="przegladaj"   class="tab-pane">

@@ -245,3 +245,24 @@ body{
 .user-info small {
   color: #545d7a;
 }
+.dane .dropdown-toggle{
+    color: white;
+}
+.dane .dropdown-toggle:focus{
+    color: white;
+    text-decoration: none;
+}
+.dane .dropdown-toggle:hover{
+    color: white;
+    background-color: transparent;
+    text-decoration: none;
+}
+.dane .dropdown button{
+background-color: rgb(202, 201, 201);
+}
+.dane .form-control{
+    height: fit-content;
+}
+.dane .list-group-flush button:focus{
+    background-color: #47bcd4;
+}
