@@ -231,6 +231,14 @@ $(document).ready(function(){
     });
   });
 });
+$(document).ready(function(){
+  $("#postsinput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#listapostow .card").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
 function mojezwierzeta(){
   document.getElementById('myPets').innerHTML="";
   document.getElementById('myPetsinput').style.display = 'flex';
@@ -398,7 +406,9 @@ function dodajzdjecie()
 }
 
 function pokazposty(){
- 
+var lista = document.getElementById('listapostow');
+
+  lista.innerHTML="";
     firebase.database().ref('/posts/').once('value', function(snapshot) {
       snapshot.forEach(function(childSnapshot) {
       {
@@ -408,18 +418,17 @@ function pokazposty(){
     var opis=childSnapshot.val().description;
     var danewystawiajacego=childSnapshot.val().owner;
     var datadodania=childSnapshot.val(). datetime;
-    var col;
+    var col, im;
     var typ=kategoria;
-    if(typ == 'psy') col = 'teal';
-    else if(typ == 'koty') col = 'purple';
-    else if(typ =='gryzonie') col = 'pink';
-    else col = 'gray';
+    if(typ == 'psy') {col = 'teal'; im= 'dog.JPG';}
+    else if(typ == 'koty'){ col = 'purple';im= 'cat.JPG';}
+    else if(typ =='gryzonie'){ col = 'pink';im= 'hamster.JPG';}
+    else {col = 'gray'; im='';};
 
-var lista = document.getElementById('listapostow');
-lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><img src='dog.JPG' alt='rover'/></div><div class='card-body'><span class='tag tag-"+col+"'>"+kategoria+"</span><h4>"+header+"</h4><p>"+opis+"</p><div class='user'><img src='https://yt3.ggpht.com/a/AGF-l7-0J1G0Ue0mcZMw-99kMeVuBmRxiPjyvIYONg=s900-c-k-c0xffffffff-no-rj-mo' alt='user' /><div class='user-info'><h5>"+danewystawiajacego+"</h5><small>"+datadodania+"</small></div></div></div></div>";
+lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><img src="+im+" alt='rover'/></div><div class='card-body'><span class='tag tag-"+col+"'>"+kategoria+"</span><h4>"+header+"</h4><p>"+opis+"</p><div class='user'><img src='https://yt3.ggpht.com/a/AGF-l7-0J1G0Ue0mcZMw-99kMeVuBmRxiPjyvIYONg=s900-c-k-c0xffffffff-no-rj-mo' alt='user' /><div class='user-info'><h5>"+danewystawiajacego+"</h5><small>"+datadodania+"</small></div></div></div></div>";
 }
 
 }); });
-
+document.getElementById("showbtn").style.display='none';
 
 }
