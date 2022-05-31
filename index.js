@@ -1,5 +1,6 @@
 var user=null;
 var uid=null; 
+pokazposty();
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
     
@@ -23,6 +24,7 @@ firebase.auth().onAuthStateChanged(function(user) {
      //console.log("1st: "+uid);
      //console.log("1st: "+email_id);
     userdata1();
+    pokazmojeposty();
       //user.sendEmailVerification();????
     }
 
@@ -281,11 +283,12 @@ function dodajzwierze(){
     }
     }
     
-
+  if(document.getElementById("petname").value!=''){
   firebase.database().ref('/users/' + firebase.auth().currentUser.uid+'/pets/').push({
     name: document.getElementById("petname").value,
     type: selected
    });
+  };
    mojezwierzeta();
     // window.alert("Zapisano."); 
 }
@@ -365,9 +368,19 @@ function podglad(publikuj){
      
       kategoria1=snapshot.val().type;
       kategoria.innerHTML=snapshot.val().type;
+      header1=snapshot.val().name;
       header.innerHTML = snapshot.val().name;
+      var col, im;
+    var typ=kategoria1;
+    if(typ == 'psy') {col = 'tag tag-teal'; im= 'dog.JPG';}
+    else if(typ == 'koty'){ col = 'tag tag-purple';im= 'cat.JPG';}
+    else if(typ =='gryzonie'){ col = 'tag tag-pink';im= 'hamster.JPG';}
+    else {col = 'tag tag-gray'; im='';};
+      
+      document.getElementById('imgsrc').innerHTML="<img id='zdjecie' src="+im+" alt='rover'/>";
+      kategoria.setAttribute('class', col);
       var today = new Date();
-      var day =today.getDate();
+      var day = today.getDate();
       var month = today.getMonth()+1;
       if(day<10){day='0'+day;}
       if(month<10){month='0'+month;}
@@ -377,7 +390,7 @@ function podglad(publikuj){
       if(today.getMinutes()<10){min='0'+today.getMinutes();}
       var time = today.getHours() + ":" +min;
       dateTime = date+' '+time;
-            data.innerHTML = dateTime;
+      data.innerHTML = dateTime;
             
        
     }
@@ -387,7 +400,7 @@ function podglad(publikuj){
   firebase.database().ref('/posts/').push({
     uid: firebase.auth().currentUser.uid,
     type: kategoria1,
-    header: header,
+    header: header1,
     description: opis,
     owner: danewystawiajacego,
     datetime: dateTime
@@ -432,3 +445,31 @@ lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><img
 document.getElementById("showbtn").style.display='none';
 
 }
+function pokazmojeposty(){
+  var lista = document.getElementById('listamoichpostow');
+  
+    lista.innerHTML="";
+      firebase.database().ref('/posts/').once('value', function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+        {
+          if(firebase.auth().currentUser.uid==childSnapshot.val().uid){
+      var owner_uid = childSnapshot.val().uid;
+      var kategoria = childSnapshot.val().type;
+      var header  =childSnapshot.val().header;
+      var opis=childSnapshot.val().description;
+      var danewystawiajacego=childSnapshot.val().owner;
+      var datadodania=childSnapshot.val(). datetime;
+      var col, im;
+      var typ=kategoria;
+      if(typ == 'psy') {col = 'teal'; im= 'dog.JPG';}
+      else if(typ == 'koty'){ col = 'purple';im= 'cat.JPG';}
+      else if(typ =='gryzonie'){ col = 'pink';im= 'hamster.JPG';}
+      else {col = 'gray'; im='';};
+  
+  lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><img src="+im+" alt='rover'/></div><div class='card-body'><span class='tag tag-"+col+"'>"+kategoria+"</span><h4>"+header+"</h4><p>"+opis+"</p><div class='user'><img src='https://yt3.ggpht.com/a/AGF-l7-0J1G0Ue0mcZMw-99kMeVuBmRxiPjyvIYONg=s900-c-k-c0xffffffff-no-rj-mo' alt='user' /><div class='user-info'><h5>"+danewystawiajacego+"</h5><small>"+datadodania+"</small></div></div></div></div>";
+  }
+}
+  }); });
+  document.getElementById("showbtn").style.display='none';
+  
+  }
