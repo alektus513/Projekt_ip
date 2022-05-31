@@ -283,6 +283,7 @@ function dodajzwierze(){
 }
 function ogolne(pet_uid,pet_name){
   localStorage.setItem('pet_uid',pet_uid);
+  document.getElementById("podgladpostu").style.display='none';
   //console.log("ogolne "+pet_uid);
   document.getElementById("namediv").innerText=pet_name;
   var rasa = document.getElementById("rasa");
@@ -331,4 +332,94 @@ var pet_uid = localStorage.getItem('pet_uid');
     }
 
   }); });
+}
+
+function podglad(publikuj){
+  document.getElementById("podgladpostu").style.display='block';
+  var pet_uid = localStorage.getItem('pet_uid');
+  var danewystawiajacego;
+  firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/').on('value', function(childSnapshot) {
+    {
+     danewystawiajacego=childSnapshot.val().name+" "+childSnapshot.val().lastname;
+     document.getElementById("wystawiajacy").innerHTML=danewystawiajacego;
+     //TO DO -> umieścić gdzieś w ogłoszeniu dane kontaktowe
+     //TO DO -> jak udostępnić klientowi dane zwierzaka i hist. medyczną?
+     //         pdf generowany przez właściciela i wymieniają się już prywatnie np. mailowo?
+    }}); 
+    var kategoria = document.getElementById('kategoria');
+    var header = document.getElementById('header');
+    var opis = document.getElementById('opisinput').value;
+    var data = document.getElementById('datadodania');
+    var dateTime='';
+  firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/pets/'+pet_uid).once('value', function(snapshot) {
+    snapshot.forEach(function(childSnapshot) {
+    {
+     
+      kategoria1=snapshot.val().type;
+      kategoria.innerHTML=snapshot.val().type;
+      header.innerHTML = snapshot.val().name;
+      var today = new Date();
+      var day =today.getDate();
+      var month = today.getMonth()+1;
+      if(day<10){day='0'+day;}
+      if(month<10){month='0'+month;}
+      var date = day+'-'+month+'-'+today.getFullYear();
+      var min=today.getMinutes();
+
+      if(today.getMinutes()<10){min='0'+today.getMinutes();}
+      var time = today.getHours() + ":" +min;
+      dateTime = date+' '+time;
+            data.innerHTML = dateTime;
+            
+       
+    }
+
+  }); });
+  if(publikuj==true){
+  firebase.database().ref('/posts/').push({
+    uid: firebase.auth().currentUser.uid,
+    type: kategoria1,
+    header: header,
+    description: opis,
+    owner: danewystawiajacego,
+    datetime: dateTime
+   
+   });
+   document.getElementById("podgladpostu").style.display='none';
+  }
+}
+
+function dodajzdjecie()
+{
+  //TO DO -> UZYTKOWNIK dodaje zdjecie, zdjecie jest wgrywane do bazy (storage) i wstawiane do podglądu postu
+  var zdjecie = document.getElementById('zdjecie');
+  
+
+}
+
+function pokazposty(){
+ 
+    firebase.database().ref('/posts/').once('value', function(snapshot) {
+      snapshot.forEach(function(childSnapshot) {
+      {
+    var owner_uid = childSnapshot.val().uid;
+    var kategoria = childSnapshot.val().type;
+    var header  =childSnapshot.val().header;
+    var opis=childSnapshot.val().description;
+    var danewystawiajacego=childSnapshot.val().owner;
+    var datadodania=childSnapshot.val(). datetime;
+    var col;
+    var typ=kategoria;
+    if(typ == 'psy') col = 'teal';
+    else if(typ == 'koty') col = 'purple';
+    else if(typ =='gryzonie') col = 'pink';
+    else col = 'gray';
+
+var lista = document.getElementById('listapostow');
+lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><img src='dog.JPG' alt='rover'/></div><div class='card-body'><span class='tag tag-"+col+"'>"+kategoria+"</span><h4>"+header+"</h4><p>"+opis+"</p><div class='user'><img src='https://yt3.ggpht.com/a/AGF-l7-0J1G0Ue0mcZMw-99kMeVuBmRxiPjyvIYONg=s900-c-k-c0xffffffff-no-rj-mo' alt='user' /><div class='user-info'><h5>"+danewystawiajacego+"</h5><small>"+datadodania+"</small></div></div></div></div>";
+}
+
+}); });
+
+
 }

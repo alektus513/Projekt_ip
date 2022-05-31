@@ -314,28 +314,52 @@ a:hover{
               <input type="file" id='select' class="form-control-file" id="pliki2">
                        
               <input id="namebox" class=".search-div input" type="text" placeholder="Nazwij plik">
-                <button id="upload" class="btn btn-success"> Zatwierdź i dodaj</button>
+                <button onclick="dodajzdjecie()" id="upload" class="btn btn-success"> Zatwierdź i dodaj</button>
                 <!--<button id="retrieve"> Przeglądaj </button>-->
                 </div>
                 
-                
-                <button style="height:50px;
-                width: 100%;
-                text-align: left;
-                background:white;
-                box-shadow: 0 0 2px rgb(180, 179, 179);
-                color: #434446;
-                margin: 3px;
-                font-weight: normal;
-                padding-left: 5%;">Dodaj ogłoszenie [TODO: PODGLĄD OGŁOSZENIA]</button>
-                
-                <h3 id="dodanepliki"></h3>
+                <hr>
+                <button style="color: black;" class="btn btn" onclick="podglad(false)">Stwórz ogłoszenie</button>
+                 <h3 id="dodanepliki"></h3>
                 <div id="pliki-list" style="display: none;"></div>
   
                 <h3 id="poprzedniewywiady"></h3>
                 <div id="wywiady-list" style="display: none;"></div>
-              
+                
+                
+                <div class="cards" id="podgladpostu" style="display: none;">
+                  <div class="container">
+                <div id="karta" class="card">
+                  <div class="card-header">
+                    <img id="zdjecie" src="dog.JPG" alt="rover" />
+                  </div>
+                  <div class="card-body">
+                    <span id="kategoria" class="tag tag-teal">Psy</span>
+                    <h4 id="header">
+<!--                     
+                      <input placeholder="Nagłówek" class="form-control" id="headerinput">
+                 -->
+                    </h4>
+                    <p id="opis">
+                     
+                      <input placeholder="Opis" class="form-control" id="opisinput">
+                
+                    </p>
+                    <div class="user">
+                      <img src="https://yt3.ggpht.com/a/AGF-l7-0J1G0Ue0mcZMw-99kMeVuBmRxiPjyvIYONg=s900-c-k-c0xffffffff-no-rj-mo" alt="user" />
+                      <div class="user-info">
+                        <h5 id="wystawiajacy">July Dec</h5>
+                        <small id="datadodania">2h ago</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
+            </div>
+            <button class="btn btn-success" onclick="podglad(true)">Opublikuj ogłoszenie</button>
+            
+            </div>
+               
 
 
               
