@@ -228,14 +228,14 @@ a:hover{
                     <form>
                       
                       <div class="form-group">
-                        <label for="trybzycia">Kategoria</label>
-                        <select class="form-control" id="trybzycia">
+                        <!-- <label for="kategoriainfo">Kategoria</label>
+                        <select class="form-control" id="kategoriainfo">
                           <option>-</option>
                           <option>Psy</option>
                           <option>Koty</option>
                           <option>Gryzonie</option>
                           <option>Inne</option>
-                        </select>
+                        </select> -->
                       </div> 
                       <div class="form-group">
                         <label for="rasa">Rasa</label>
@@ -263,7 +263,7 @@ a:hover{
                       </div>
                       
                       </form>
-                      <button id="zapisz_ogolne" class="btn btn-success">Zapisz</button>
+                      <button onclick="zapiszogolne()" id="zapisz_ogolne" class="btn btn-success">Zapisz</button>
     
                   </div>
                 </div>
@@ -306,21 +306,20 @@ a:hover{
               </div>
                 
               <div id="przegladaj"   class="tab-pane">
-                <img id="myimg"> <label id="UpProgress" ></label>
+                <!-- <img id="myimg"> <label id="UpProgress" ></label> -->
               <div style="display: flex; flex-wrap: wrap; justify-content: space-evenly;align-items: baseline;">
               
                 
-              <!--<button id="select">1. Wybierz plik </button>-->
-              <input type="file" id='select' class="form-control-file" id="pliki2">
+              <!-- <input type="file" id='select' class="form-control-file" id="pliki2"> -->
                        
-              <input id="namebox" class=".search-div input" type="text" placeholder="Nazwij plik">
-                <button onclick="dodajzdjecie()" id="upload" class="btn btn-success"> Zatwierdź i dodaj</button>
-                <!--<button id="retrieve"> Przeglądaj </button>-->
+              <!-- <input id="namebox" class=".search-div input" type="text" placeholder="Nazwij plik"> -->
+                <!-- <button onclick="dodajzdjecie()" id="upload" class="btn btn-success"> Zatwierdź i dodaj</button> -->
                 </div>
-                
+                <div>
                 <hr>
                 <button style="color: black;" class="btn btn" onclick="podglad(false)">Stwórz ogłoszenie</button>
-                 <h3 id="dodanepliki"></h3>
+                </div> 
+                <h3 id="dodanepliki"></h3>
                 <div id="pliki-list" style="display: none;"></div>
   
                 <h3 id="poprzedniewywiady"></h3>
@@ -374,18 +373,11 @@ a:hover{
 
 
 
-
-
-
-
-
-
-
-
         <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
         <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase-storage.js"></script>
         
          <script>
+            if (!firebase.apps.length) {
           // Initialize Firebase
           var config = {
           apiKey: "AIzaSyC12TEpObCW-adZWPWo7fwONg99IXnhEo4",
@@ -396,8 +388,44 @@ a:hover{
           messagingSenderId: "7865506719",
           appId: "1:7865506719:web:ecf7682dadb3ea3e74fbaa"
         };
-        var app = firebase.initializeApp(config);
-        
+       // var app = firebase.initializeApp(config);  
+      
+    firebase.initializeApp(config);
+          }
+       // mojezwierzeta1(); 
+        function mojezwierzeta1(){
+  document.getElementById('myPets').innerHTML="";
+  document.getElementById('myPetsinput').style.display = 'flex';
+  firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/pets/').once('value', function(snapshot) {
+    snapshot.forEach(function(childSnapshot) {
+    {
+    // document.getElementById("imie").value=childSnapshot.val().name;
+     //document.getElementById("nazwisko").value=childSnapshot.val().lastname;
+     //console.log(childSnapshot.val().name +" " + childSnapshot.val().type);
+     var lista = document.getElementById('myPets');
+     var newpet = document.createElement('button');
+     newpet.setAttribute('class', 'list-group list-group-flush list-group-item');
+     var typ =  childSnapshot.val().type;
+     var col;
+     if(typ == 'psy') col = 'teal';
+     else if(typ == 'koty') col = 'purple';
+     else if(typ =='gryzonie') col = 'pink';
+     else col = 'gray';
+     newpet.style.display='flex';
+     newpet.style.alignItems='center';
+     newpet.style.justifyContent='space-between';
+     newpet.style.fontSize='20px';
+     newpet.innerHTML='<span class="tag tag-'+col+'">'+ childSnapshot.val().type+'</span><p>'+childSnapshot.val().name+'</p>';
+     newpet.setAttribute('id',childSnapshot.key);
+     newpet.setAttribute('value', childSnapshot.val().name);
+     newpet.setAttribute('onclick','ogolne(this.id, this.value)');
+     
+     lista.appendChild(newpet);     
+    }
+
+  }); });
+  
+}    
         </script>
         
         <script src="index.js"></script>

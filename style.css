@@ -186,7 +186,7 @@ body{
 .container {
   display: flex;
   width: 1040px;
-  justify-content: center;
+  justify-content: space-e;
   flex-wrap: wrap;
 }
 .card {
@@ -233,7 +233,9 @@ body{
 .tag-gray{
     background-color: #cccccc;
 }
-
+.tag-green{
+    background-color:#097241;
+}
 .card-body p {
   font-size: 13px;
   margin: 0 0 40px;

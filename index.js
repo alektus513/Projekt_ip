@@ -1,14 +1,16 @@
-var user=null;
-var uid=null; 
-pokazposty();
+var user= firebase.auth().currentUser;
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
-    
+   
     // User is signed in.   
     user = firebase.auth().currentUser;
     uid=user.uid;
+    
+    localStorage.setItem('uid',uid);
     var email_id = user.email;
     
+    userdata1();
+    //pokazmojeposty();
     document.getElementById("logowanie").style.display="none";
    // document.getElementById('rejestracja').style.display="none";
     
@@ -21,16 +23,13 @@ firebase.auth().onAuthStateChanged(function(user) {
 
     if(user != null){
      
-     //console.log("1st: "+uid);
-     //console.log("1st: "+email_id);
-    userdata1();
     pokazmojeposty();
-      //user.sendEmailVerification();????
+
     }
 
   } else {
     // No user is signed in.
-    
+    console.log("no one");
     document.getElementById("logowanie").style.display="block";
     document.getElementById("logout-btn").style.display="none";
     document.getElementById("signup-btn").style.display="block";
@@ -40,6 +39,7 @@ firebase.auth().onAuthStateChanged(function(user) {
     document.getElementById("mojekonto").style.display="none";
   }
 });
+pokazposty();
 
 function login(){
 
@@ -165,7 +165,7 @@ function saveuserdata(){
     tel :  document.getElementById("nrtel").value,
     city: document.getElementById("miasto").value
      });
-     window.alert("Zapisano.");
+     //window.alert("Zapisano.");
 }
 
 
@@ -184,7 +184,6 @@ function checkUserEmail(){
        // document.getElementById("userEmailError").style.display = "none";
     }
 }
-// xxxxxxxxxx Password Validation xxxxxxxxxx
 function checkUserPassword(){
     var userPassword = document.getElementById("userPassword");
     var userPasswordFormate = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{10,}/;      
@@ -258,12 +257,18 @@ function mojezwierzeta(){
      if(typ == 'psy') col = 'teal';
      else if(typ == 'koty') col = 'purple';
      else if(typ =='gryzonie') col = 'pink';
-     else col = 'gray';
+     else col = 'green';
      newpet.style.display='flex';
      newpet.style.alignItems='center';
      newpet.style.justifyContent='space-between';
      newpet.style.fontSize='20px';
+     if(childSnapshot.val().published=="true"){
+
+      newpet.innerHTML='<span class="tag tag-'+'gray'+'">'+ childSnapshot.val().type+'</span><p>'+childSnapshot.val().name+' [P]</p>';
+     }
+     else{
      newpet.innerHTML='<span class="tag tag-'+col+'">'+ childSnapshot.val().type+'</span><p>'+childSnapshot.val().name+'</p>';
+     }
      newpet.setAttribute('id',childSnapshot.key);
      newpet.setAttribute('value', childSnapshot.val().name);
      newpet.setAttribute('onclick','ogolne(this.id, this.value)');
@@ -286,7 +291,8 @@ function dodajzwierze(){
   if(document.getElementById("petname").value!=''){
   firebase.database().ref('/users/' + firebase.auth().currentUser.uid+'/pets/').push({
     name: document.getElementById("petname").value,
-    type: selected
+    type: selected,
+    published: "false"
    });
   };
    mojezwierzeta();
@@ -295,13 +301,51 @@ function dodajzwierze(){
 function ogolne(pet_uid,pet_name){
   localStorage.setItem('pet_uid',pet_uid);
   document.getElementById("podgladpostu").style.display='none';
-  //console.log("ogolne "+pet_uid);
+  //console.log("ogolne "+typ+" "+pet_name);
   document.getElementById("namediv").innerText=pet_name;
   var rasa = document.getElementById("rasa");
   var umaszczenie = document.getElementById("umaszczenie");
   var charakter = document.getElementById("charakter");
   var upodobania = document.getElementById("upodobania");
   var dodinfo = document.getElementById("dodinfo");
+  //var kategoria =document.getElementById("kategoriainfo");
+  //var pet_uid = localStorage.getItem('pet_uid');
+  firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/pets/'+pet_uid).once('value', function(snapshot) {
+   // snapshot.forEach(function(childSnapshot) {
+    {
+     
+     rasa.innerHTML=snapshot.val().breed ?? "";
+     umaszczenie.innerHTML =snapshot.val().colour ?? "";
+     charakter.innerHTML =snapshot.val().character ?? "";
+     upodobania.innerHTML =snapshot.val().likes ?? "";
+     dodinfo.innerHTML =snapshot.val().info ?? "";
+      
+    }
+
+  }); //});
+  
+ // window.alert("Zapisano.");
+
+
+}
+function zapiszogolne(){
+  document.getElementById("podgladpostu").style.display='none';
+  var pet_uid = localStorage.getItem('pet_uid');
+  //console.log("ogolne "+typ+" "+pet_name);
+ // document.getElementById("namediv").innerText=pet_name;
+  var rasa = document.getElementById("rasa").value;
+  var umaszczenie = document.getElementById("umaszczenie").value;
+  var charakter = document.getElementById("charakter").value;
+  var upodobania = document.getElementById("upodobania").value;
+  var dodinfo = document.getElementById("dodinfo").value;
+  firebase.database().ref('/users/' + firebase.auth().currentUser.uid+'/pets/'+pet_uid).update({
+    breed: rasa, 
+    colour:umaszczenie,
+    character:charakter,
+    likes: upodobania,
+    info : dodinfo
+   });
+  
 }
 function histmed(){
   var opis1 = document.getElementById("opis").value;
@@ -348,10 +392,13 @@ var pet_uid = localStorage.getItem('pet_uid');
 function podglad(publikuj){
   document.getElementById("podgladpostu").style.display='block';
   var pet_uid = localStorage.getItem('pet_uid');
-  var danewystawiajacego;
+  var danewystawiajacego; var telefon;
+  var mail =firebase.auth().currentUser.email;
   firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/').on('value', function(childSnapshot) {
-    {
-     danewystawiajacego=childSnapshot.val().name+" "+childSnapshot.val().lastname;
+    {telefon=childSnapshot.val().tel ?? "";
+     danewystawiajacego="Tel: "+telefon+", "+mail+"<br> "+childSnapshot.val().name+" "+childSnapshot.val().lastname;
+     
+     telefon = childSnapshot.val().tel;
      document.getElementById("wystawiajacy").innerHTML=danewystawiajacego;
      //TO DO -> umieścić gdzieś w ogłoszeniu dane kontaktowe
      //TO DO -> jak udostępnić klientowi dane zwierzaka i hist. medyczną?
@@ -362,6 +409,7 @@ function podglad(publikuj){
     var opis = document.getElementById('opisinput').value;
     var data = document.getElementById('datadodania');
     var dateTime='';
+    var czyopublikowano=false;
   firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/pets/'+pet_uid).once('value', function(snapshot) {
     snapshot.forEach(function(childSnapshot) {
     {
@@ -370,6 +418,7 @@ function podglad(publikuj){
       kategoria.innerHTML=snapshot.val().type;
       header1=snapshot.val().name;
       header.innerHTML = snapshot.val().name;
+      czyopublikowano = snapshot.val().published;
       var col, im;
     var typ=kategoria1;
     if(typ == 'psy') {col = 'tag tag-teal'; im= 'dog.JPG';}
@@ -396,17 +445,27 @@ function podglad(publikuj){
     }
 
   }); });
-  if(publikuj==true){
+  if((publikuj==true) && !czyopublikowano){
+    firebase.database().ref('/users/' + firebase.auth().currentUser.uid+'/pets/'+pet_uid).update({
+      published:"true"
+     });
+
+
   firebase.database().ref('/posts/').push({
     uid: firebase.auth().currentUser.uid,
     type: kategoria1,
     header: header1,
     description: opis,
     owner: danewystawiajacego,
-    datetime: dateTime
+    datetime: dateTime,
+    tel: telefon,
+    petuid: pet_uid
    
    });
    document.getElementById("podgladpostu").style.display='none';
+  }
+  else if((publikuj==true) && czyopublikowano){
+    window.alert('Post został już opublikowany. Aby dodać kolejny - usuń poprzedni post.');
   }
 }
 
@@ -425,20 +484,22 @@ var lista = document.getElementById('listapostow');
     firebase.database().ref('/posts/').once('value', function(snapshot) {
       snapshot.forEach(function(childSnapshot) {
       {
-    var owner_uid = childSnapshot.val().uid;
-    var kategoria = childSnapshot.val().type;
-    var header  =childSnapshot.val().header;
-    var opis=childSnapshot.val().description;
-    var danewystawiajacego=childSnapshot.val().owner;
-    var datadodania=childSnapshot.val(). datetime;
-    var col, im;
-    var typ=kategoria;
-    if(typ == 'psy') {col = 'teal'; im= 'dog.JPG';}
-    else if(typ == 'koty'){ col = 'purple';im= 'cat.JPG';}
-    else if(typ =='gryzonie'){ col = 'pink';im= 'hamster.JPG';}
-    else {col = 'gray'; im='';};
+         
+        var owner_uid = childSnapshot.val().uid;
+        var kategoria = childSnapshot.val().type;
+        var header  =childSnapshot.val().header ?? "";
+        var opis=childSnapshot.val().description ?? "";
+        var danewystawiajacego=childSnapshot.val().owner;
+        var datadodania=childSnapshot.val(). datetime;
+        var tel = childSnapshot.val().tel ?? "-";
+        var col, im;
+        var typ=kategoria;
+        if(typ == 'psy') {col = 'teal'; im= 'dog.JPG';}
+        else if(typ == 'koty'){ col = 'purple';im= 'cat.JPG';}
+        else if(typ =='gryzonie'){ col = 'pink';im= 'hamster.JPG';}
+        else {col = 'gray'; im='';};
 
-lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><img src="+im+" alt='rover'/></div><div class='card-body'><span class='tag tag-"+col+"'>"+kategoria+"</span><h4>"+header+"</h4><p>"+opis+"</p><div class='user'><img src='https://yt3.ggpht.com/a/AGF-l7-0J1G0Ue0mcZMw-99kMeVuBmRxiPjyvIYONg=s900-c-k-c0xffffffff-no-rj-mo' alt='user' /><div class='user-info'><h5>"+danewystawiajacego+"</h5><small>"+datadodania+"</small></div></div></div></div>";
+lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><img src="+im+" alt='rover'/></div><div class='card-body'><span class='tag tag-"+col+"'>"+kategoria+"</span><h4>"+header+"</h4><p>"+opis+"</p><div class='user'><img src='https://yt3.ggpht.com/a/AGF-l7-0J1G0Ue0mcZMw-99kMeVuBmRxiPjyvIYONg=s900-c-k-c0xffffffff-no-rj-mo' alt='user' /><div class='user-info'> Tel: "+tel+"<h5>"+danewystawiajacego+"</h5><small>"+datadodania+"</small></div></div></div></div>";
 }
 
 }); });
@@ -446,6 +507,7 @@ document.getElementById("showbtn").style.display='none';
 
 }
 function pokazmojeposty(){
+  
   var lista = document.getElementById('listamoichpostow');
   
     lista.innerHTML="";
@@ -458,7 +520,10 @@ function pokazmojeposty(){
       var header  =childSnapshot.val().header;
       var opis=childSnapshot.val().description;
       var danewystawiajacego=childSnapshot.val().owner;
-      var datadodania=childSnapshot.val(). datetime;
+      var del_pet_uid = childSnapshot.key;
+      var pet_uid = childSnapshot.val().petuid;
+      //console.log(pet_uid);
+      var datadodania=childSnapshot.val().datetime;
       var col, im;
       var typ=kategoria;
       if(typ == 'psy') {col = 'teal'; im= 'dog.JPG';}
@@ -466,10 +531,18 @@ function pokazmojeposty(){
       else if(typ =='gryzonie'){ col = 'pink';im= 'hamster.JPG';}
       else {col = 'gray'; im='';};
   
-  lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><img src="+im+" alt='rover'/></div><div class='card-body'><span class='tag tag-"+col+"'>"+kategoria+"</span><h4>"+header+"</h4><p>"+opis+"</p><div class='user'><img src='https://yt3.ggpht.com/a/AGF-l7-0J1G0Ue0mcZMw-99kMeVuBmRxiPjyvIYONg=s900-c-k-c0xffffffff-no-rj-mo' alt='user' /><div class='user-info'><h5>"+danewystawiajacego+"</h5><small>"+datadodania+"</small></div></div></div></div>";
-  }
+  lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><div><button class='btn btn' onclick='usunpost(\""+del_pet_uid+"\",\""+pet_uid+"\")'>Usuń post</button><div><img src="+im+" alt='rover'/></div><div class='card-body'><span class='tag tag-"+col+"'>"+kategoria+"</span><h4>"+header+"</h4><p>"+opis+"</p><div class='user'><img src='https://yt3.ggpht.com/a/AGF-l7-0J1G0Ue0mcZMw-99kMeVuBmRxiPjyvIYONg=s900-c-k-c0xffffffff-no-rj-mo' alt='user' /><div class='user-info'><h5>"+danewystawiajacego+"</h5><small>"+datadodania+"</small></div></div></div></div>";
+    // console.log(pet_uid);
+}
 }
   }); });
   document.getElementById("showbtn").style.display='none';
+  
+  }
+  function usunpost(del_pet_uid,pet_uid){
+    firebase.database().ref('/posts/'+del_pet_uid).remove();
+    firebase.database().ref('/users/' + firebase.auth().currentUser.uid+'/pets/'+pet_uid).update({
+      published:"false"
+     });
   
   }

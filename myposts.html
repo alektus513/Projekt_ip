@@ -77,7 +77,7 @@
             </div><!-- /.container-fluid -->
           </nav>
           </div><!-- header -->
-    
+           <div style="width: 100%; background-color:white; height: 5rem; justify-content:center; display: flex; align-items: center;"><h3>Twoje posty</h3></div>
           <div class="cards" >
             <!-- <button id="showbtn" class="showbtn" onclick="pokazposty()">Pokaż ogłoszenia</button> -->
            
@@ -85,14 +85,11 @@
             </div>
           </div>
 
-
-
-
-
           <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
           <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase-storage.js"></script>
           
            <script>
+               if (!firebase.apps.length) {
             // Initialize Firebase
             var config = {
             apiKey: "AIzaSyC12TEpObCW-adZWPWo7fwONg99IXnhEo4",
@@ -103,8 +100,39 @@
             messagingSenderId: "7865506719",
             appId: "1:7865506719:web:ecf7682dadb3ea3e74fbaa"
           };
-          var app = firebase.initializeApp(config);
-          
+         // var app = firebase.initializeApp(config);
+          firebase.initializeApp(config);
+          }
+          //pokazmojeposty1();
+          function pokazmojeposty1(){
+  var lista = document.getElementById('listamoichpostow');
+  
+    lista.innerHTML="";
+      firebase.database().ref('/posts/').once('value', function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+        {
+          if(firebase.auth().currentUser.uid==childSnapshot.val().uid){
+      var owner_uid = childSnapshot.val().uid;
+      var kategoria = childSnapshot.val().type;
+      var header  =childSnapshot.val().header;
+      var opis=childSnapshot.val().description;
+      var danewystawiajacego=childSnapshot.val().owner;
+      var datadodania=childSnapshot.val(). datetime;
+      var col, im;
+      var typ=kategoria;
+      if(typ == 'psy') {col = 'teal'; im= 'dog.JPG';}
+      else if(typ == 'koty'){ col = 'purple';im= 'cat.JPG';}
+      else if(typ =='gryzonie'){ col = 'pink';im= 'hamster.JPG';}
+      else {col = 'gray'; im='';};
+  
+  lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><img src="+im+" alt='rover'/></div><div class='card-body'><span class='tag tag-"+col+"'>"+kategoria+"</span><h4>"+header+"</h4><p>"+opis+"</p><div class='user'><img src='https://yt3.ggpht.com/a/AGF-l7-0J1G0Ue0mcZMw-99kMeVuBmRxiPjyvIYONg=s900-c-k-c0xffffffff-no-rj-mo' alt='user' /><div class='user-info'><h5>"+danewystawiajacego+"</h5><small>"+datadodania+"</small></div></div></div></div>";
+            console.log("Lista ok");
+}
+}
+  }); });
+  document.getElementById("showbtn").style.display='none';
+  
+  }
           </script>
           
           <script src="index.js"></script>
