@@ -22,6 +22,7 @@ firebase.auth().onAuthStateChanged(function(user) {
     document.getElementById("myfav-btn").style.display="block";
 
     document.getElementById("mojekonto").style.display="block";
+    document.getElementById("myid").value=firebase.auth().currentUser.uid;
 
     if(user != null){
      
@@ -150,7 +151,7 @@ location.reload();
     } */
 }
 function userdata1(){
-  document.getElementById("myid").value=firebase.auth().currentUser.uid;
+ // document.getElementById("myid").value=firebase.auth().currentUser.uid;
   firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/').on('value', function(childSnapshot) {
     {
      document.getElementById("imie").value=childSnapshot.val().name;
