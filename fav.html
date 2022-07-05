@@ -1,0 +1,284 @@
+<html> 
+  <head>
+    <title>adpt</title>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">   
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+   
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="style.css" rel="stylesheet" />
+  </head>
+  <style>
+      
+.containerP{
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+
+width:100%;
+}
+.container div{
+  margin: 3px;
+ 
+}
+.container div.dane{
+  flex-grow: 1;
+  min-width: 270px;
+  margin-right: 3px;
+  flex-wrap: nowrap;
+ 
+  
+}
+ .nav1{
+    border-radius: 45px;
+  width: 100%;
+} 
+
+.tab-content{ 
+    padding:5px;
+    background-color: rgba(201, 37, 108, 0.349);
+    border-left: dashed 2px white;
+    width: 100%;
+}
+.tab-pane .btn:focus{
+  outline: none;
+}
+.nav-tabs > li > a{
+  border: medium none;
+  color: black;
+  background-color: rgba(255, 255, 255, 0.771);
+}
+
+.dane{
+  text-align: left;
+  width: 25%;
+  color: black;
+  margin-right: 3px; margin-left: 3px;
+border-radius: 5px;
+
+}
+
+.dane button{
+    display: flex;
+    justify-content:space-between;
+    align-items:flex-start;
+}
+.dane button p{ 
+   font-size: 20px;
+}
+
+.profil{
+  display: flex;
+  height: 100%;
+  width: 100%;
+  color: white;
+  
+}
+
+a{
+  color:white;
+  
+ 
+}
+solid{
+  color:white;
+}
+a:hover{
+  text-decoration-line: none;
+  color:white;
+}
+  </style>
+  <body >
+
+<div class="header">
+    <nav class="navbar navbar-default1"> <!-- navbar navbar-default -->
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed1" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <!-- <a class="navbar-brand" href="#">ADPT</a> -->
+            <a href="/"><img src="pet.png" style="margin: 2px; background-color: rgba(244, 235, 239, 0.582); border-radius: 200px; width:50px; height: 50px;">
+            </a>
+          </div>
+      
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+              
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li class="nav-item"> 
+                <a class="nav-link" href="/mypets.html" id="mypets-btn">Moje zwierzęta</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/myposts.html" id="myposts-btn">Moje posty</a>
+              </li>
+                      
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Konto<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                      
+                      <li id="logowanie">
+                        <h6 class="dropdown-header">Zaloguj się</h6>
+                        <div class="form-group">
+                            <input class="form-control" type="email" placeholder="Email..." id="email_field" />
+                            <input class="form-control" type="password" placeholder="Hasło..." id="password_field" />
+                             
+                             <button type="submit" class="btn btn-default" onclick="login()">Zaloguj</button>
+                            </div>
+                            </li>
+                      <li class="form-group" id="logout-btn">
+                        <button type="submit" class="btn btn-default" onclick="logout()">Wyloguj</button> 
+                      </li>
+                      <li></li>
+                      <h6 class="dropdown-header" id="q">Nie masz konta?</h6>
+                      <li style="display: flex; justify-content: center;">
+                        <button class="btn btn-default" id="signup-btn" onclick="signupview()">Zarejestruj się</button>
+                      </li>
+                      <li role="separator" class="divider"></li>
+                      <li id="mojekonto"><a href="/profile.html">Moje konto</a></li>
+                     </ul>
+                  </li>
+              
+              
+            </ul>
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+      </nav>
+      </div><!-- header -->
+
+      <div id="profil" class="profil">
+  
+        <div id="profil-cont" class="containerP">
+      
+          <div class="dane"> 
+            <div class="dropdown" style="border-radius: 5px; font-size: large; background-color:darkkhaki; padding: 4%;">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dodaj do ulubionych <span class="add"></span></a>
+              <ul class="dropdown-menu">
+                
+                <li>
+                  <div class="form" name="addpet"> 
+                    <form>
+                      <input class="form-control" id="userkey" type="name" placeholder="Klucz użytkownika..."  />
+                      <div class="form-control form-check">
+                        
+                      </div>
+                      
+                     
+                      </form>
+                      <button style="margin-left: 2%; margin-right: 2%; width: 96%;" onclick="dodajklucz()" class="btn btn-default">Dodaj</button>
+
+                      </div>
+                      </li>
+                    </ul>
+              </div>
+            <button class="btn btn-default" style="margin-top: 2px; width: 100%; justify-content: center;" onclick="moiobserwowani()">Pokaż wszystkie</button>
+            
+            <input style="display: none; margin-top: 2px; margin-bottom: 2px;" class="form-control" id="myPetsinput" type="text" placeholder="Szukaj..">
+            <!-- <p style="height: 0px;" id="klucz"></p>  -->
+            <ul class="list-group list-group-flush" id="myPets1">
+             
+         </ul>
+       
+            
+          </div>
+          
+    
+             <div class="nav1">
+               <div id="iddiv" style="background-color: #8f8f8fc5; border-radius: 5px; padding: 1%; text-align: center;"></div>
+              <ul class="nav nav-tabs nav-justified ">
+                <li class="active"><a data-toggle="tab" href="">Posty użytkownika</a></li>
+                
+              </ul>
+              
+              
+                  </div>
+                </div>
+                
+    
+                
+                   
+                
+                    
+               
+
+
+              
+             </div>
+    
+              
+        </div>
+        
+      </div>
+
+
+
+
+        <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase-storage.js"></script>
+        
+         <script>
+            if (!firebase.apps.length) {
+          // Initialize Firebase
+          var config = {
+          apiKey: "AIzaSyC12TEpObCW-adZWPWo7fwONg99IXnhEo4",
+          authDomain: "adopt-a-pet2.firebaseapp.com",
+          databaseURL: "https://adopt-a-pet2-default-rtdb.firebaseio.com/",
+          projectId: "adopt-a-pet2",
+          storageBucket: "adopt-a-pet2.appspot.com",
+          messagingSenderId: "7865506719",
+          appId: "1:7865506719:web:ecf7682dadb3ea3e74fbaa"
+        };
+       // var app = firebase.initializeApp(config);  
+      
+    firebase.initializeApp(config);
+          }
+       // mojezwierzeta1(); 
+        function mojezwierzeta1(){
+ // document.getElementById('myPets').innerHTML="";
+ // document.getElementById('myPetsinput').style.display = 'flex';
+ // firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/pets/').once('value', function(snapshot) {
+    snapshot.forEach(function(childSnapshot) {
+    {
+    // document.getElementById("imie").value=childSnapshot.val().name;
+     //document.getElementById("nazwisko").value=childSnapshot.val().lastname;
+     //console.log(childSnapshot.val().name +" " + childSnapshot.val().type);
+    //  var lista = document.getElementById('myPets');
+    //  var newpet = document.createElement('button');
+    //  newpet.setAttribute('class', 'list-group list-group-flush list-group-item');
+    //  var typ =  childSnapshot.val().type;
+    //  var col;
+    //  if(typ == 'psy') col = 'teal';
+    //  else if(typ == 'koty') col = 'purple';
+    //  else if(typ =='gryzonie') col = 'pink';
+    //  else col = 'gray';
+    //  newpet.style.display='flex';
+    //  newpet.style.alignItems='center';
+    //  newpet.style.justifyContent='space-between';
+    //  newpet.style.fontSize='20px';
+    //  newpet.innerHTML='<span class="tag tag-'+col+'">'+ childSnapshot.val().type+'</span><p>'+childSnapshot.val().name+'</p>';
+    //  newpet.setAttribute('id',childSnapshot.key);
+    //  newpet.setAttribute('value', childSnapshot.val().name);
+    //  newpet.setAttribute('onclick','ogolne(this.id, this.value)');
+     
+    //  lista.appendChild(newpet);     
+    }
+
+  });// });
+  
+}    
+        </script>
+        
+        <script src="index.js"></script>
+      </body>
+</html>

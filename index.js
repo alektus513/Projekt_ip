@@ -23,7 +23,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
     if(user != null){
      
-    pokazmojeposty();
+    pokazmojeposty(firebase.auth().currentUser.uid);
 
     }
 
@@ -467,6 +467,7 @@ function podglad(publikuj){
 
    document.getElementById("podgladpostu").style.display='none';
    window.alert('Post został opublikowany pomyślnie.');
+   location.reload();
   }
   else if((publikuj==true) && (czyopublikowano=='true')){
     window.alert('Post został już opublikowany. Aby dodać kolejny - usuń poprzedni post.');
@@ -475,10 +476,6 @@ function podglad(publikuj){
 
 function dodajzdjecie()
 {
-  //TO DO -> UZYTKOWNIK dodaje zdjecie, zdjecie jest wgrywane do bazy (storage) i wstawiane do podglądu postu
-  var zdjecie = document.getElementById('zdjecie');
-  
-
 }
 
 function pokazposty(){
@@ -511,7 +508,7 @@ lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><img
 document.getElementById("showbtn").style.display='none';
 
 }
-function pokazmojeposty(){
+function pokazmojeposty(klucz){
   
   var lista = document.getElementById('listamoichpostow');
   
@@ -519,7 +516,9 @@ function pokazmojeposty(){
       firebase.database().ref('/posts/').once('value', function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
         {
-          if(firebase.auth().currentUser.uid==childSnapshot.val().uid){
+        //  if(firebase.auth().currentUser.uid==childSnapshot.val().uid){
+     if(klucz==childSnapshot.val().uid){
+     
       var owner_uid = childSnapshot.val().uid;
       var kategoria = childSnapshot.val().type;
       var header  =childSnapshot.val().header;
@@ -552,5 +551,71 @@ function pokazmojeposty(){
     firebase.database().ref('/users/' + firebase.auth().currentUser.uid+'/pets/'+pet_uid).update({
       published:"false"
      });
+     location.reload();
+  }
+
+ 
+  function dodajklucz(){
+  var klucz = document.getElementById("userkey").value;
+  if(document.getElementById("userkey").value!=''){
+    firebase.database().ref('users/'+klucz).on('value', function(snapshot) {
+        if(!snapshot.hasChild("email")) window.alert("Ten użytkownik nie istnieje.");
+        else{
+
+      
+        firebase.database().ref('/users/' + firebase.auth().currentUser.uid+'/favs/').push({
+          favuid: klucz
+         });
+           favlist(klucz);
+         }
+      
+   
+     }); 
+     }
+  else{
+    window.alert("Wprowadź wartość."); 
+  }
   
+ 
+  // mojezwierzeta();
+    // window.alert("Zapisano."); 
+  }
+  function favlist(klucz){
+
+    document.getElementById('myPets1').innerHTML="";
+    //document.getElementById('myPetsinput').style.display = 'flex';
+
+    firebase.database().ref('users/'+klucz).once('value', function(snapshot) {
+   //   snapshot.forEach(function(childSnapshot) {
+      {
+       var lista = document.getElementById('myPets1');
+       var newpet = document.createElement('button');
+       newpet.setAttribute('class', 'list-group list-group-flush list-group-item');
+      // var typ =  childSnapshot.val().type;
+       var col;
+     
+       col = 'green';
+       newpet.style.display='flex';
+       newpet.style.alignItems='center';
+       newpet.style.justifyContent='space-between';
+       newpet.style.fontSize='20px';
+       //if(childSnapshot.val().published=="true")
+       {
+  
+        newpet.innerHTML='<span class="tag tag-'+'green'+'"> </span><p>'+snapshot.val().email+'</p>';
+       }
+       newpet.setAttribute('id',snapshot.key);
+       newpet.setAttribute('value', snapshot.val().name + ' '+ snapshot.val().lastname);
+       newpet.setAttribute('onclick','favposts(this.id, this.value)');
+       
+       lista.appendChild(newpet);     
+      }
+  
+    }); //});
+  }
+  function favposts(id, value){
+
+
+
+
   }
