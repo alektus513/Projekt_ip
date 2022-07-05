@@ -19,6 +19,8 @@ firebase.auth().onAuthStateChanged(function(user) {
     document.getElementById("q").style.display="none";
     document.getElementById("myposts-btn").style.display="block";
     document.getElementById("mypets-btn").style.display="block";
+    document.getElementById("myfav-btn").style.display="block";
+
     document.getElementById("mojekonto").style.display="block";
 
     if(user != null){
@@ -36,7 +38,10 @@ firebase.auth().onAuthStateChanged(function(user) {
     document.getElementById("q").style.display="block";
     document.getElementById("myposts-btn").style.display="none";
     document.getElementById("mypets-btn").style.display="none";
+    document.getElementById("myfav-btn").style.display="none";
+
     document.getElementById("mojekonto").style.display="none";
+
   }
 });
 pokazposty();
@@ -145,6 +150,7 @@ location.reload();
     } */
 }
 function userdata1(){
+  document.getElementById("myid").value=firebase.auth().currentUser.uid;
   firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/').on('value', function(childSnapshot) {
     {
      document.getElementById("imie").value=childSnapshot.val().name;
@@ -426,7 +432,7 @@ function podglad(publikuj){
     if(typ == 'psy') {col = 'tag tag-teal'; im= 'dog.JPG';}
     else if(typ == 'koty'){ col = 'tag tag-purple';im= 'cat.JPG';}
     else if(typ =='gryzonie'){ col = 'tag tag-pink';im= 'hamster.JPG';}
-    else {col = 'tag tag-gray'; im='';};
+    else {col = 'tag tag-gray'; im='camera.png';};
       
       document.getElementById('imgsrc').innerHTML="<img id='zdjecie' src="+im+" alt='rover'/>";
       kategoria.setAttribute('class', col);
@@ -499,9 +505,9 @@ var lista = document.getElementById('listapostow');
         if(typ == 'psy') {col = 'teal'; im= 'dog.JPG';}
         else if(typ == 'koty'){ col = 'purple';im= 'cat.JPG';}
         else if(typ =='gryzonie'){ col = 'pink';im= 'hamster.JPG';}
-        else {col = 'gray'; im='';};
+        else {col = 'gray'; im='camera.png';};
 
-lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><img src="+im+" alt='rover'/></div><div class='card-body'><span class='tag tag-"+col+"'>"+kategoria+"</span><h4>"+header+"</h4><p>"+opis+"</p><div class='user'><img src='https://yt3.ggpht.com/a/AGF-l7-0J1G0Ue0mcZMw-99kMeVuBmRxiPjyvIYONg=s900-c-k-c0xffffffff-no-rj-mo' alt='user' /><div class='user-info'>"+danewystawiajacego+"</h5><small>"+datadodania+"</small></div></div></div></div>";
+lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><img src="+im+" alt='rover'/></div><div class='card-body'><span class='tag tag-"+col+"'>"+kategoria+"</span><h4>"+header+"</h4><p>"+opis+"</p><div class='user'><img src='user.png' alt='user' /><div class='user-info'>"+danewystawiajacego+"</h5><small>"+datadodania+"</small></div></div></div></div>";
 }
 
 }); });
@@ -535,7 +541,7 @@ function pokazmojeposty(klucz){
       if(typ == 'psy') {col = 'teal'; im= 'dog.JPG';}
       else if(typ == 'koty'){ col = 'purple';im= 'cat.JPG';}
       else if(typ =='gryzonie'){ col = 'pink';im= 'hamster.JPG';}
-      else {col = 'gray'; im='';};
+      else {col = 'gray'; im='camera.png';};
 //lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><img src="+im+" alt='rover'/></div><div class='card-body'><span class='tag tag-"+col+"'>"+kategoria+"</span><h4>"+header+"</h4><p>"+opis+"</p><div class='user'><img src='https://yt3.ggpht.com/a/AGF-l7-0J1G0Ue0mcZMw-99kMeVuBmRxiPjyvIYONg=s900-c-k-c0xffffffff-no-rj-mo' alt='user' /><div class='user-info'> Tel: "+tel+", "+mail+"<br> "+danewystawiajacego+"</h5><small>"+datadodania+"</small></div></div></div></div>";
   
   lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><div><button class='btn btn' onclick='usunpost(\""+del_pet_uid+"\",\""+pet_uid+"\")'>Usuń post</button><div><img src="+im+" alt='rover'/></div><div class='card-body'><span class='tag tag-"+col+"'>"+kategoria+"</span><h4>"+header+"</h4><p>"+opis+"</p><div class='user'><img src='https://yt3.ggpht.com/a/AGF-l7-0J1G0Ue0mcZMw-99kMeVuBmRxiPjyvIYONg=s900-c-k-c0xffffffff-no-rj-mo' alt='user' /><div class='user-info'><h5>"+danewystawiajacego+"</h5><small>"+datadodania+"</small></div></div></div></div>";
@@ -618,4 +624,18 @@ function pokazmojeposty(klucz){
 
 
 
+  }
+  function copy() {
+    /* Get the text field */
+    var copyText = document.getElementById("myid");
+  
+    /* Select the text field */
+   // copyText.select();
+   // copyText.setSelectionRange(0, 99999); /* For mobile devices */
+  
+     /* Copy the text inside the text field */
+    navigator.clipboard.writeText(copyText.value);
+  
+    /* Alert the copied text */
+   // alert("Copied the text: " + copyText.value);
   }
