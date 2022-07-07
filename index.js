@@ -361,9 +361,9 @@ function histmed(){
   var zalecenia1 = document.getElementById("zalecenia").value;
   var pet_uid = localStorage.getItem('pet_uid');
   var today = new Date();
-var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-var dateTime = date+' '+time;
+  var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+  var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  var dateTime = date+' '+time;
   
   
   firebase.database().ref('/users/' + firebase.auth().currentUser.uid+'/pets/'+pet_uid+"/Med/").push({
@@ -406,13 +406,10 @@ function podglad(publikuj){
   firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/').on('value', function(childSnapshot) {
     {
     telefon=childSnapshot.val().tel ?? "";
-     danewystawiajacego="Tel: "+telefon+", "+usermail+"<br> "+childSnapshot.val().name+" "+childSnapshot.val().lastname;
-     
+    danewystawiajacego="Tel: "+telefon+", "+usermail+"<br> "+childSnapshot.val().name+" "+childSnapshot.val().lastname;
+  
     // telefon = childSnapshot.val().tel;
-     document.getElementById("wystawiajacy").innerHTML=danewystawiajacego;
-     //TO DO -> umieścić gdzieś w ogłoszeniu dane kontaktowe
-     //TO DO -> jak udostępnić klientowi dane zwierzaka i hist. medyczną?
-     //         pdf generowany przez właściciela i wymieniają się już prywatnie np. mailowo?
+     document.getElementById("wystawiajacy").innerHTML=danewystawiajacego;  
     }}); 
     var kategoria = document.getElementById('kategoria');
     var header = document.getElementById('header');
@@ -509,7 +506,9 @@ var lista = document.getElementById('listapostow');
         else if(typ =='gryzonie'){ col = 'pink';im= 'hamster.JPG';}
         else {col = 'gray'; im='camera.png';};
 
-lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><img src="+im+" alt='rover'/></div><div class='card-body'><span class='tag tag-"+col+"'>"+kategoria+"</span><h4>"+header+"</h4><p>"+opis+"</p><div class='user'><img src='user.png' alt='user' /><div class='user-info'>"+danewystawiajacego+"</h5><small>"+datadodania+"</small></div></div></div></div>";
+                
+                lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><img src="+im+" alt='rover'/></div><div class='card-body'><span class='tag tag-"+col+"'>"+kategoria+"</span><h4>"+header+"</h4><p>"+opis+"</p><div class='user'><img src='user.png' alt='user' /><div class='user-info'>"+danewystawiajacego+"</h5><small>"+datadodania+"</small></div></div><button type='button' style='margin-left:18%; font-size:10px; ;'>Kopiuj kod użytkownika</button></div></div>";
+
 }
 
 }); });
