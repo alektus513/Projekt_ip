@@ -77,15 +77,19 @@ function logout(){
 function signupview(){
   document.getElementById("rejestracja").style.display="block";
 }
-function signUp(){
-  
+
+function signUp(){    
     var userEmail = document.getElementById("userEmail").value;
     var userPassword = document.getElementById("userPassword").value;
-    firebase.auth().createUserWithEmailAndPassword(userEmail, userPassword)
+    var userPasswordConfirm = document.getElementById("passwordConfirm").value;
+
+    // rejestracja gdy dobre hasła i mail tylko:
+    if(validateUserData(userEmail, userPassword, userPasswordConfirm))
+    {
+      firebase.auth().createUserWithEmailAndPassword(userEmail, userPassword)
     .then((userCredential) => {
       // Signed in 
       //var user = userCredential.user;    
-       // ...
     })
     .then((success) =>{
       firebase.database().ref('/users/' + firebase.auth().currentUser.uid).set({
@@ -152,7 +156,60 @@ function signUp(){
        // document.getElementById("rejestracja").style.display="none";
 location.reload();
     } */
+
+    }
+    
 }
+
+function validateUserData(userEmail, userPassword, userPasswordConfirm)
+{
+  if (userEmail!='' ) {
+    // sprawdzenie czy zgodne ze wzorem:
+    if (!validateEmail(userEmail)){
+      window.alert("Błąd przy rejestracji! Sprawdź czy Twój email jest poprawny");
+      return false;
+    }  
+  } else {
+    window.alert("Błąd przy rejestracji! Email nie może być pusty");
+    return false;
+    }
+  
+  if (userPassword!='' && userPasswordConfirm!='') {
+    // sprawdzenie ze wzorcem
+    if(userPassword.length < 6) {
+      window.alert("Błąd przy rejestracji! Hasło musi zawierać przynajmniej 6 znaków");
+      return false;
+    }
+    if(!validatePassword(userPassword, userPasswordConfirm)) {
+      window.alert("Błąd przy rejestracji! Powtórz hasło");
+      return false;
+    }
+  } else {
+    window.alert("Błąd przy rejestracji! Hasło nie może być puste");
+    return false;
+    }
+
+    return true;
+}
+
+function validateEmail(userEmail) {
+  var userEmailFormate = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  if (userEmail.match(userEmailFormate)){
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function validatePassword(userPassword, passwordConfirm) {
+  //var userPasswordFormate =/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;  
+  if (userPassword === passwordConfirm) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 function userdata1(){
  // document.getElementById("myid").value=firebase.auth().currentUser.uid;
   firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/').on('value', function(childSnapshot) {
@@ -179,36 +236,36 @@ function saveuserdata(){
 }
 
 
-function checkUserEmail(){
-    var userEmail = document.getElementById("userEmail");
-    var userEmailFormate = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    var flag;
-    if(userEmail.value.match(userEmailFormate)){
-        flag = false;
-    }else{
-        flag = true;
-    }
-    if(flag){
-       // document.getElementById("userEmailError").style.display = "block";
-    }else{
-       // document.getElementById("userEmailError").style.display = "none";
-    }
-}
-function checkUserPassword(){
-    var userPassword = document.getElementById("userPassword");
-    var userPasswordFormate = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{10,}/;      
-    var flag;
-    if(userPassword.value.match(userPasswordFormate)){
-        flag = false;
-    }else{
-        flag = true;
-    }    
-    if(flag){
-      //  document.getElementById("userPasswordError").style.display = "block";
-    }else{
-      //  document.getElementById("userPasswordError").style.display = "none";
-    }
-}
+// function checkUserEmail(){
+//     var userEmail = document.getElementById("userEmail");
+//     var userEmailFormate = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+//     var flag;
+//     if(userEmail.value.match(userEmailFormate)){
+//         flag = false;
+//     }else{
+//         flag = true;
+//     }
+//     if(flag){
+//        // document.getElementById("userEmailError").style.display = "block";
+//     }else{
+//        // document.getElementById("userEmailError").style.display = "none";
+//     }
+// }
+// function checkUserPassword(){
+//     var userPassword = document.getElementById("userPassword");
+//     var userPasswordFormate = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{10,}/;      
+//     var flag;
+//     if(userPassword.value.match(userPasswordFormate)){
+//         flag = false;
+//     }else{
+//         flag = true;
+//     }    
+//     if(flag){
+//       //  document.getElementById("userPasswordError").style.display = "block";
+//     }else{
+//       //  document.getElementById("userPasswordError").style.display = "none";
+//     }
+// }
 
 
 // Filter table
@@ -250,6 +307,7 @@ $(document).ready(function(){
     });
   });
 });
+
 function mojezwierzeta(){
   document.getElementById('myPets').innerHTML="";
   document.getElementById('myPetsinput').style.display = 'flex';
