@@ -67,8 +67,10 @@ function login(){
 
 function logout(){
   firebase.auth().signOut();
-  //location.href("../index.html");
-
+  location.href = "index.html";
+  document.reload();
+  location.reload();
+  
 }
 
 
