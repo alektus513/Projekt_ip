@@ -26,8 +26,8 @@ firebase.auth().onAuthStateChanged(function(user) {
 
     if(user != null){
      
-    pokazmojeposty(firebase.auth().currentUser.uid);
-
+    //pokazmojeposty(firebase.auth().currentUser.uid);
+    //pokazmojeposty();
     }
 
   } else {
@@ -46,6 +46,7 @@ firebase.auth().onAuthStateChanged(function(user) {
   }
 });
 pokazposty();
+pokazmojeposty();
 
 function login(){
 
@@ -515,16 +516,16 @@ lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><img
 document.getElementById("showbtn").style.display='none';
 
 }
-function pokazmojeposty(klucz){
-  
+function pokazmojeposty(){
+  var klucz = firebase.auth().currentUser.uid;
   var lista = document.getElementById('listamoichpostow');
   
     lista.innerHTML="";
       firebase.database().ref('/posts/').once('value', function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
         {
-        //  if(firebase.auth().currentUser.uid==childSnapshot.val().uid){
-     if(klucz==childSnapshot.val().uid){
+          if(firebase.auth().currentUser.uid==childSnapshot.val().uid){
+     //if(klucz==childSnapshot.val().uid){
      
       var owner_uid = childSnapshot.val().uid;
       var kategoria = childSnapshot.val().type;
@@ -550,7 +551,7 @@ function pokazmojeposty(klucz){
 }
 }
   }); });
-  document.getElementById("showbtn").style.display='none';
+ // document.getElementById("showbtn").style.display='none';
   
   }
   function usunpost(del_pet_uid,pet_uid){
