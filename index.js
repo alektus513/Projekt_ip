@@ -157,7 +157,12 @@ function signUp(){
 location.reload();
     } */
 
+    document.getElementById("rejestracja").style.display="none";
+    window.alert("Rejestracja użytkownika powiodła się");
+
     }
+
+
     
 }
 
