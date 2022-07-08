@@ -507,7 +507,7 @@ var lista = document.getElementById('listapostow');
         else {col = 'gray'; im='camera.png';};
 
                 
-                lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><img src="+im+" alt='rover'/></div><div class='card-body'><span class='tag tag-"+col+"'>"+kategoria+"</span><h4>"+header+"</h4><p>"+opis+"</p><div class='user'><img src='user.png' alt='user' /><div class='user-info'>"+danewystawiajacego+"</h5><small>"+datadodania+"</small></div></div><button type='button' style='margin-left:18%; font-size:10px; ;'>Kopiuj kod użytkownika</button></div></div>";
+        lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><img src="+im+" alt='rover'/></div><div class='card-body'><span class='tag tag-"+col+"'>"+kategoria+"</span><h4>"+header+"</h4><p>"+opis+"</p><div class='user'><img src='user.png' alt='user' /><div class='user-info'>"+danewystawiajacego+"</h5><small>"+datadodania+"</small></div></div><button onclick='copy1(\""+owner_uid+"\")' type='button' style='margin-left:18%; font-size:10px; ;'>Kopiuj kod użytkownika</button></div></div>";
 
 }
 
@@ -569,11 +569,14 @@ function pokazmojeposty(){
         if(!snapshot.hasChild("email")) window.alert("Ten użytkownik nie istnieje.");
         else{
 
-      
-        firebase.database().ref('/users/' + firebase.auth().currentUser.uid+'/favs/').push({
-          favuid: klucz
-         });
-           favlist(klucz);
+      var imie = (snapshot.child("name").val());
+      var nazwisko = (snapshot.child("lastname").val());
+          firebase.database().ref('/users/' + firebase.auth().currentUser.uid+'/favs/').push({
+            favuid:klucz,
+            name: imie,
+            lastname: nazwisko
+           });
+           favlist();
          }
       
    
@@ -587,13 +590,13 @@ function pokazmojeposty(){
   // mojezwierzeta();
     // window.alert("Zapisano."); 
   }
-  function favlist(klucz){
+  function favlist(){
 
     document.getElementById('myPets1').innerHTML="";
     //document.getElementById('myPetsinput').style.display = 'flex';
 
-    firebase.database().ref('users/'+klucz).once('value', function(snapshot) {
-   //   snapshot.forEach(function(childSnapshot) {
+    firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/favs/').once('value', function(snapshot) {
+      snapshot.forEach(function(childSnapshot) {
       {
        var lista = document.getElementById('myPets1');
        var newpet = document.createElement('button');
@@ -609,7 +612,7 @@ function pokazmojeposty(){
        //if(childSnapshot.val().published=="true")
        {
   
-        newpet.innerHTML='<span class="tag tag-'+'green'+'"> </span><p>'+snapshot.val().email+'</p>';
+        newpet.innerHTML='<span class="tag tag-'+'green'+'"> </span><p>'+childSnapshot.val().name+' '+childSnapshot.val().lastname+'</p>';
        }
        newpet.setAttribute('id',snapshot.key);
        newpet.setAttribute('value', snapshot.val().name + ' '+ snapshot.val().lastname);
@@ -618,25 +621,17 @@ function pokazmojeposty(){
        lista.appendChild(newpet);     
       }
   
-    }); //});
+    }); });
   }
   function favposts(id, value){
-
-
-
-
+   
   }
   function copy() {
-    /* Get the text field */
     var copyText = document.getElementById("myid");
-  
-    /* Select the text field */
-   // copyText.select();
-   // copyText.setSelectionRange(0, 99999); /* For mobile devices */
-  
-     /* Copy the text inside the text field */
     navigator.clipboard.writeText(copyText.value);
-  
     /* Alert the copied text */
    // alert("Copied the text: " + copyText.value);
+  }
+  function copy1(text) {
+    navigator.clipboard.writeText(text);
   }
