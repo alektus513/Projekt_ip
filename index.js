@@ -1,35 +1,22 @@
 var user= firebase.auth().currentUser;
 firebase.auth().onAuthStateChanged(function(user) {
-  if (user) {
-   
-    // User is signed in.   
+  if (user) { 
     user = firebase.auth().currentUser;
-    uid=user.uid;
-    
+    uid=user.uid;  
     localStorage.setItem('uid',uid);
     var email_id = user.email;
-    
     userdata1();
-    //pokazmojeposty();
     document.getElementById("logowanie").style.display="none";
-   // document.getElementById('rejestracja').style.display="none";
-    
+   // document.getElementById('rejestracja').style.display="none"; 
     document.getElementById("logout-btn").style.display="flex";
     document.getElementById("signup-btn").style.display="none";
     document.getElementById("q").style.display="none";
     document.getElementById("myposts-btn").style.display="block";
     document.getElementById("mypets-btn").style.display="block";
     document.getElementById("myfav-btn").style.display="block";
-
     document.getElementById("mojekonto").style.display="block";
     document.getElementById("myid").value=firebase.auth().currentUser.uid;
-
-    if(user != null){
-     
-    //pokazmojeposty(firebase.auth().currentUser.uid);
-    //pokazmojeposty();
-    }
-
+    if(user != null){}
   } else {
     // No user is signed in.
     console.log("no one");
@@ -40,57 +27,38 @@ firebase.auth().onAuthStateChanged(function(user) {
     document.getElementById("myposts-btn").style.display="none";
     document.getElementById("mypets-btn").style.display="none";
     document.getElementById("myfav-btn").style.display="none";
-
     document.getElementById("mojekonto").style.display="none";
-
   }
 });
-pokazposty();
-pokazmojeposty();
-
+pokazposty();//pokazmojeposty();
 function login(){
-
   var userEmail = document.getElementById("email_field").value;
   var userPass = document.getElementById("password_field").value;
-
   firebase.auth().signInWithEmailAndPassword(userEmail, userPass).catch(function(error) {
     location.reload();
-    // Handle Errors here.
     var errorCode = error.code;
     var errorMessage = error.message;
    // window.alert("Error : " + errorMessage);
-   window.alert("Błąd przy logowaniu! Sprawdź czy Twój email i hasło są poprawne");
-    
+   window.alert("Błąd przy logowaniu! Sprawdź czy Twój email i hasło są poprawne"); 
   }); 
-
 }
-
 function logout(){
   firebase.auth().signOut();
   location.href = "index.html";
   document.reload();
-  location.reload();
-  
+  location.reload(); 
 }
-
-
 function signupview(){
   document.getElementById("rejestracja").style.display="block";
 }
-
 function signUp(){    
     var userEmail = document.getElementById("userEmail").value;
     var userPassword = document.getElementById("userPassword").value;
     var userPasswordConfirm = document.getElementById("passwordConfirm").value;
-
-    // rejestracja gdy dobre hasła i mail tylko:
     if(validateUserData(userEmail, userPassword, userPasswordConfirm))
     {
       firebase.auth().createUserWithEmailAndPassword(userEmail, userPassword)
-    .then((userCredential) => {
-      // Signed in 
-      //var user = userCredential.user;    
-    })
+    .then((userCredential) => {})
     .then((success) =>{
       firebase.database().ref('/users/' + firebase.auth().currentUser.uid).set({
       name: document.getElementById("userName").value,
@@ -101,7 +69,6 @@ function signUp(){
     .catch((error) => {
       var errorCode = error.code;
       var errorMessage = error.message;
-      // ..
     });
     // firebase.database().ref('users/' + uid).set({
     //   name: document.getElementById("userName").value,
@@ -159,13 +126,8 @@ location.reload();
 
     document.getElementById("rejestracja").style.display="none";
     window.alert("Rejestracja użytkownika powiodła się");
-
     }
-
-
-    
 }
-
 function validateUserData(userEmail, userPassword, userPasswordConfirm)
 {
   if (userEmail!='' ) {
@@ -178,7 +140,6 @@ function validateUserData(userEmail, userPassword, userPasswordConfirm)
     window.alert("Błąd przy rejestracji! Email nie może być pusty");
     return false;
     }
-  
   if (userPassword!='' && userPasswordConfirm!='') {
     // sprawdzenie ze wzorcem
     if(userPassword.length < 6) {
@@ -193,7 +154,6 @@ function validateUserData(userEmail, userPassword, userPasswordConfirm)
     window.alert("Błąd przy rejestracji! Hasło nie może być puste");
     return false;
     }
-
     return true;
 }
 
@@ -239,8 +199,6 @@ function saveuserdata(){
      });
      //window.alert("Zapisano.");
 }
-
-
 // function checkUserEmail(){
 //     var userEmail = document.getElementById("userEmail");
 //     var userEmailFormate = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -272,9 +230,6 @@ function saveuserdata(){
 //     }
 // }
 
-
-// Filter table
-
 $(document).ready(function(){
   $("#tableSearch").on("keyup", function() {
     var value = $(this).val().toLowerCase();
@@ -283,19 +238,6 @@ $(document).ready(function(){
     });
   });
 });
-
-// //Filter list
-
-// $(document).ready(function(){
-//   $("#listSearch").on("keyup", function() {
-//     var value = $(this).val().toLowerCase();
-//     $("#myList li").filter(function() {
-//       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-//     });
-//   });
-// });
-
-// FIlter anything
 $(document).ready(function(){
   $("#myPetsinput").on("keyup", function() {
     var value = $(this).val().toLowerCase();
@@ -319,9 +261,6 @@ function mojezwierzeta(){
   firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/pets/').once('value', function(snapshot) {
     snapshot.forEach(function(childSnapshot) {
     {
-    // document.getElementById("imie").value=childSnapshot.val().name;
-     //document.getElementById("nazwisko").value=childSnapshot.val().lastname;
-     //console.log(childSnapshot.val().name +" " + childSnapshot.val().type);
      var lista = document.getElementById('myPets');
      var newpet = document.createElement('button');
      newpet.setAttribute('class', 'list-group list-group-flush list-group-item');
@@ -369,12 +308,10 @@ function dodajzwierze(){
    });
   };
    mojezwierzeta();
-    // window.alert("Zapisano."); 
 }
 function ogolne(pet_uid,pet_name){
   localStorage.setItem('pet_uid',pet_uid);
   document.getElementById("podgladpostu").style.display='none';
-  //console.log("ogolne "+typ+" "+pet_name);
   document.getElementById("namediv").innerText=pet_name;
   var rasa = document.getElementById("rasa");
   var umaszczenie = document.getElementById("umaszczenie");
@@ -386,7 +323,6 @@ function ogolne(pet_uid,pet_name){
   firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/pets/'+pet_uid).once('value', function(snapshot) {
    // snapshot.forEach(function(childSnapshot) {
     {
-     
      rasa.innerHTML=snapshot.val().breed ?? "";
      umaszczenie.innerHTML =snapshot.val().colour ?? "";
      charakter.innerHTML =snapshot.val().character ?? "";
@@ -396,10 +332,6 @@ function ogolne(pet_uid,pet_name){
     }
 
   }); //});
-  
- // window.alert("Zapisano.");
-
-
 }
 function zapiszogolne(){
   document.getElementById("podgladpostu").style.display='none';
@@ -580,16 +512,17 @@ var lista = document.getElementById('listapostow');
 document.getElementById("showbtn").style.display='none';
 
 }
-function pokazmojeposty(){
-  var klucz = firebase.auth().currentUser.uid;
-  var lista = document.getElementById('listamoichpostow');
+function pokazpostyuzytkownika(klucz){
+  //var klucz = firebase.auth().currentUser.uid;
+  console.log(klucz);
+  var lista = document.getElementById('listapostowuzytkownika');
   
     lista.innerHTML="";
       firebase.database().ref('/posts/').once('value', function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
         {
-          if(firebase.auth().currentUser.uid==childSnapshot.val().uid){
-     //if(klucz==childSnapshot.val().uid){
+         // if(firebase.auth().currentUser.uid==childSnapshot.val().uid){
+     if(klucz==childSnapshot.val().uid){
      
       var owner_uid = childSnapshot.val().uid;
       var kategoria = childSnapshot.val().type;
@@ -608,10 +541,7 @@ function pokazmojeposty(){
       else if(typ == 'koty'){ col = 'purple';im= 'cat.JPG';}
       else if(typ =='gryzonie'){ col = 'pink';im= 'hamster.JPG';}
       else {col = 'gray'; im='camera.png';};
-//lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><img src="+im+" alt='rover'/></div><div class='card-body'><span class='tag tag-"+col+"'>"+kategoria+"</span><h4>"+header+"</h4><p>"+opis+"</p><div class='user'><img src='https://yt3.ggpht.com/a/AGF-l7-0J1G0Ue0mcZMw-99kMeVuBmRxiPjyvIYONg=s900-c-k-c0xffffffff-no-rj-mo' alt='user' /><div class='user-info'> Tel: "+tel+", "+mail+"<br> "+danewystawiajacego+"</h5><small>"+datadodania+"</small></div></div></div></div>";
-  
-  lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><div><button class='btn btn' onclick='usunpost(\""+del_pet_uid+"\",\""+pet_uid+"\")'>Usuń post</button><div><img src="+im+" alt='rover'/></div><div class='card-body'><span class='tag tag-"+col+"'>"+kategoria+"</span><h4>"+header+"</h4><p>"+opis+"</p><div class='user'><img src='https://yt3.ggpht.com/a/AGF-l7-0J1G0Ue0mcZMw-99kMeVuBmRxiPjyvIYONg=s900-c-k-c0xffffffff-no-rj-mo' alt='user' /><div class='user-info'><h5>"+danewystawiajacego+"</h5><small>"+datadodania+"</small></div></div></div></div>";
-    // console.log(pet_uid);
+lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><img src="+im+" alt='rover'/></div><div class='card-body'><span class='tag tag-"+col+"'>"+kategoria+"</span><h4>"+header+"</h4><p>"+opis+"</p><div class='user'><img src='user.png' alt='user' /><div class='user-info'>"+danewystawiajacego+"</h5><small>"+datadodania+"</small></div></div></div></div>";
 }
 }
   }); });
@@ -651,14 +581,10 @@ function pokazmojeposty(){
     window.alert("Wprowadź wartość."); 
   }
   
- 
-  // mojezwierzeta();
-    // window.alert("Zapisano."); 
   }
   function favlist(){
 
     document.getElementById('myPets1').innerHTML="";
-    //document.getElementById('myPetsinput').style.display = 'flex';
 
     firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/favs/').once('value', function(snapshot) {
       snapshot.forEach(function(childSnapshot) {
@@ -666,7 +592,7 @@ function pokazmojeposty(){
        var lista = document.getElementById('myPets1');
        var newpet = document.createElement('button');
        newpet.setAttribute('class', 'list-group list-group-flush list-group-item');
-      // var typ =  childSnapshot.val().type;
+   
        var col;
      
        col = 'green';
@@ -679,9 +605,9 @@ function pokazmojeposty(){
   
         newpet.innerHTML='<span class="tag tag-'+'green'+'"> </span><p>'+childSnapshot.val().name+' '+childSnapshot.val().lastname+'</p>';
        }
-       newpet.setAttribute('id',snapshot.key);
+       newpet.setAttribute('id',childSnapshot.val().favuid);
        newpet.setAttribute('value', snapshot.val().name + ' '+ snapshot.val().lastname);
-       newpet.setAttribute('onclick','favposts(this.id, this.value)');
+       newpet.setAttribute('onclick','pokazpostyuzytkownika(this.id)');
        
        lista.appendChild(newpet);     
       }

@@ -193,7 +193,14 @@
   appId: "1:7865506719:web:ecf7682dadb3ea3e74fbaa"
 };
 var app = firebase.initializeApp(config);
-
+$(document).ready(function(){
+  $("#postsinput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#listapostow .card").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
 </script>
 
 <script src="index.js"></script>
