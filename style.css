@@ -278,3 +278,22 @@ background-color: rgb(202, 201, 201);
 .dane .list-group-flush button:focus{
     background-color: #47bcd4;
 }
+.xButton {
+	background-color:#cbcfceb2;
+	border-radius:100%;
+    border:none;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:12px;
+	
+	text-decoration:none;
+}
+.xButton:hover {
+	background-color:#e0e0e0;
+}
+.xButton:active {
+	position:relative;
+	top:1px;
+}

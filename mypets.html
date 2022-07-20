@@ -226,18 +226,13 @@ a:hover{
                 <div id="ogolne" class="tab-pane active" >
                  
                   <div>
+                    <button class='btn btn-default' style='margin-left: 10%;' onclick='OgolnePDF()'>Dane ogólne (.pdf)</button>
+
                     <!-- <button class="button"  style="background-color: rgb(252, 212, 35);" onclick="PokazOgolne()">Pokaż i edytuj</button> -->
                     <form>
                       
                       <div class="form-group">
-                        <!-- <label for="kategoriainfo">Kategoria</label>
-                        <select class="form-control" id="kategoriainfo">
-                          <option>-</option>
-                          <option>Psy</option>
-                          <option>Koty</option>
-                          <option>Gryzonie</option>
-                          <option>Inne</option>
-                        </select> -->
+                       
                       </div> 
                       <div class="form-group">
                         <label for="rasa">Rasa</label>
@@ -266,13 +261,16 @@ a:hover{
                       
                       </form>
                       <button onclick="zapiszogolne()" id="zapisz_ogolne" class="btn btn-success">Zapisz</button>
-    
+                 
+                      
                   </div>
                 </div>
                 
     
                 <div id="karta" class="tab-pane">
                 <div>
+                 <button class='btn btn-default' style='margin-left: 10%;' onclick='OgolnePDF2()'>Historia medyczna(.pdf)</button>
+
                   <form>
     
                         <div class="form-group">
@@ -296,6 +294,7 @@ a:hover{
                   <button onclick="pokazhistmed()" class="btn btn-default">Pokaż poprzednie wpisy</button>
                     
                   <button id="zapisz_histmed" onclick="histmed()" class="btn btn-success">Zapisz</button>
+ 
                 </div>
                 <div id="poprzedniemed" style="display: none;">
               <div style=" text-align: center; font-size: large;">
@@ -374,7 +373,9 @@ a:hover{
 
 
 
-
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js" integrity="sha512-gYUM+7JjtBqPPGOgwgOZ+NwjGl+11/EP124oB+ihjlBpLgP5LTh7R/Iwcdy//cgH+QzrjspBiJI5iUegTNww3w==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js" integrity="sha512-vv3EN6dNaQeEWDcxrKPFYSFba/kgm//IUnvLPMPadaUf5+ylZyx4cKxuc4HdBf0PPAlM7560DV63ZcolRJFPqA==" crossorigin="anonymous"></script>
+      
         <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
         <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase-storage.js"></script>
         

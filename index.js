@@ -190,14 +190,14 @@ function userdata1(){
     }}); 
 }
 function saveuserdata(){
-  firebase.database().ref('/users/' + firebase.auth().currentUser.uid).set({
+  firebase.database().ref('/users/' + firebase.auth().currentUser.uid).update({
     name: document.getElementById("imie").value,
     lastname:document.getElementById("nazwisko").value,
     email: document.getElementById("email").value,
     tel :  document.getElementById("nrtel").value,
     city: document.getElementById("miasto").value
      });
-     //window.alert("Zapisano.");
+     window.alert("Zapisano.");
 }
 // function checkUserEmail(){
 //     var userEmail = document.getElementById("userEmail");
@@ -312,7 +312,7 @@ function dodajzwierze(){
 function ogolne(pet_uid,pet_name){
   localStorage.setItem('pet_uid',pet_uid);
   document.getElementById("podgladpostu").style.display='none';
-  document.getElementById("namediv").innerText=pet_name;
+  document.getElementById("namediv").innerHTML=pet_name;
   var rasa = document.getElementById("rasa");
   var umaszczenie = document.getElementById("umaszczenie");
   var charakter = document.getElementById("charakter");
@@ -343,12 +343,14 @@ function zapiszogolne(){
   var charakter = document.getElementById("charakter").value;
   var upodobania = document.getElementById("upodobania").value;
   var dodinfo = document.getElementById("dodinfo").value;
+  var specjalne = document.getElementById("specjalne").value;
   firebase.database().ref('/users/' + firebase.auth().currentUser.uid+'/pets/'+pet_uid).update({
     breed: rasa, 
     colour:umaszczenie,
     character:charakter,
     likes: upodobania,
-    info : dodinfo
+    info : dodinfo,
+    specjal:specjalne
    });
   
 }
@@ -357,6 +359,7 @@ function histmed(){
   var zabiegi1 = document.getElementById("zabiegi").value;
   var zalecenia1 = document.getElementById("zalecenia").value;
   var pet_uid = localStorage.getItem('pet_uid');
+  
   var today = new Date();
   var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
   var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
@@ -590,39 +593,255 @@ lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><img
       snapshot.forEach(function(childSnapshot) {
       {
        var lista = document.getElementById('myPets1');
-       var newpet = document.createElement('button');
-       newpet.setAttribute('class', 'list-group list-group-flush list-group-item');
+       var nevfav = document.createElement('button');
+       nevfav.setAttribute('class', 'list-group list-group-flush list-group-item');
    
        var col;
      
        col = 'green';
-       newpet.style.display='flex';
-       newpet.style.alignItems='center';
-       newpet.style.justifyContent='space-between';
-       newpet.style.fontSize='20px';
+       nevfav.style.display='flex';
+       nevfav.style.alignItems='center';
+       nevfav.style.justifyContent='space-between';
+       nevfav.style.fontSize='20px';
        //if(childSnapshot.val().published=="true")
        {
-  
-        newpet.innerHTML='<span class="tag tag-'+'green'+'"> </span><p>'+childSnapshot.val().name+' '+childSnapshot.val().lastname+'</p>';
+        var xbtn = document.createElement('button');
+        xbtn.setAttribute('class', 'xButton');
+        xbtn.setAttribute('id',childSnapshot.val().favuid);
+        xbtn.setAttribute('onclick','deletefav(this.id)');
+        xbtn.setAttribute('title','Usuń');
+        xbtn.innerText="x";
+        nevfav.innerHTML='<span></span><p>'+childSnapshot.val().name+' '+childSnapshot.val().lastname+'</p>';
        }
-       newpet.setAttribute('id',childSnapshot.val().favuid);
-       newpet.setAttribute('value', snapshot.val().name + ' '+ snapshot.val().lastname);
-       newpet.setAttribute('onclick','pokazpostyuzytkownika(this.id)');
-       
-       lista.appendChild(newpet);     
+       nevfav.setAttribute('id',childSnapshot.val().favuid);
+       nevfav.setAttribute('value', snapshot.val().name + ' '+ snapshot.val().lastname);
+       nevfav.setAttribute('onclick','pokazpostyuzytkownika(this.id)');
+       nevfav.append(xbtn);
+       lista.appendChild(nevfav);     
       }
   
     }); });
   }
-  function favposts(id, value){
-   
+  function deletefav(id){
+    console.log("do usuniecia: "+id);
+    
+    firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/favs/').once('value', function(snapshot) {
+      snapshot.forEach(function(childSnapshot) {  
+      {   
+       if(childSnapshot.val().favuid==id)
+       {
+        console.log("usune: "+childSnapshot.key);
+        
+        firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/favs/'+childSnapshot.key).remove();
+       }
+      }
+  
+    }); });
   }
   function copy() {
     var copyText = document.getElementById("myid");
     navigator.clipboard.writeText(copyText.value);
-    /* Alert the copied text */
-   // alert("Copied the text: " + copyText.value);
   }
   function copy1(text) {
     navigator.clipboard.writeText(text);
   }
+  function OgolnePDF(){
+  var petID=localStorage.getItem('pet_uid');
+  //console.log("key: "+petID);
+  firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/pets/'+petID+"/").on('value', function(childSnapshot) {
+    {
+     var imiez = childSnapshot.val()?.name;
+     var rasa = childSnapshot.val()?.breed ||"-";
+     //var hobby="hobby";
+     var charakter =childSnapshot.val()?.character||"-";
+     var umaszczenie =childSnapshot.val()?.colour||"-";
+     var charakter=childSnapshot.val()?.character||"-";
+     var upodobania =childSnapshot.val()?.likes||"-";
+     var specjalne =childSnapshot.val()?.special||"-";
+     var dodinfo= childSnapshot.val()?.info||"-";
+     firebase.database().ref('users/'+firebase.auth().currentUser.uid).on('value', function(childSnapshot) {
+      {
+         var imie = childSnapshot.val().name;
+         var nazwisko = childSnapshot.val().lastname; 
+         var telefon =childSnapshot.val().tel;
+         var data="";//childSnapshot.val().DataUr;
+         var miasto=childSnapshot.val().city;
+         var email=childSnapshot.val()?.email;
+        var docDefinition={
+          pageMargins: [ 50,50,50,50 ],
+          content:[
+            
+            {text: new Date().toISOString().slice(0, 10),fontSize:9},
+            {text: " ", fontSize:10},
+            {text: "INFORMACJE OGÓLNE ", fontSize:12, bold:true, decoration:'underline'},
+            {text: " ", fontSize:20},
+            {text: "Dane właściciela ", fontSize:10,lineHeight: 1.5},
+            {canvas: [{ type: 'line', x1: 15, y1: 0, x2: 515-15, y2: 0, lineWidth: 0.5 }] },
+           {text: " ", fontSize:20},
+           {columns: [
+            { width: '*', text: '' },
+            {
+                width: 'auto',
+                
+                  table: {
+                   
+                    headerRows: 0,
+                    
+                    body: [
+            
+                      [{ text: 'Imię',alignment: 'left'},{ text: imie ,bold:true}],
+                     // [{ text: 'Data urodzenia',alignment: 'left'},{ text: data ,bold:true}],
+                      [{ text: 'Miasto',alignment: 'left'},{ text: miasto ,bold:true}],
+                      [{ text: 'E-mail',alignment: 'left'},{ text: email,bold:true}],
+                      [{ text: 'Telefon kontaktowy',alignment: 'left'},{ text: telefon ,bold:true}],
+                      
+                    ]
+                  },
+                layout:'lightHorizontalLines'
+                },
+            
+            { width: '*', text: '' },
+        ]
+    },
+         
+           {text: " ", fontSize:40},
+           {text: "Informacje ogólne o zwierzęciu ", fontSize:10,lineHeight: 1.5},
+           {canvas: [{ type: 'line', x1: 15, y1: 0, x2: 515-15, y2: 0, lineWidth: 0.5 }] },
+           {text: " ", fontSize:20},
+           {columns: [
+            { width: '*', text: '' },
+            {
+                width: 'auto',
+                  table: {
+                    headerRows: 0,
+                    body: [
+                      [{ text: 'Imię',alignment: 'left'},{ text: imiez ,bold:true}],
+                      [{ text: 'Rasa',alignment: 'left'},{ text: rasa ,bold:true}],
+                      [{ text: 'Umaszczenie',alignment: 'left'},{ text: umaszczenie ,bold:true}],
+                      [{ text: 'Charakter',alignment: 'left'},{ text: charakter ,bold:true}],
+                      [{ text: 'Upodobania ',alignment: 'left'},{ text: upodobania ,bold:true}],
+                      [{ text: 'Specjalne potrzeby',alignment: 'left'},{ text: specjalne ,bold:true}],
+                      [{ text: 'Dodatkowe informacje',alignment: 'left'},{ text: dodinfo,bold:true}],
+                      
+                    ]
+                  },
+                layout:'lightHorizontalLines'
+                },
+            
+            { width: '*', text: '' },
+        ]
+    },
+
+    
+
+
+
+
+
+       ] //content
+        }
+        pdfMake.createPdf(docDefinition).download("Ogólne_"+nazwisko);
+        
+     }});
+      
+    }});
+   
+
+  
+
+  }
+  function OgolnePDF2(){
+    var petID=localStorage.getItem('pet_uid');
+    var rows=[]; var idx=0;
+   // console.log("key: "+petID);
+    firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/pets/'+petID+"/Med/").once('value', function(snapshot) {
+      {
+        snapshot.forEach(function(childSnapshot) {  
+        idx=idx+1;
+        console.log("key: "+snapshot.val().name);
+        var data = childSnapshot.val()?.data||"-";
+        var opis = childSnapshot.val()?.opis||"-";
+        var zabiegi = childSnapshot.val()?.zabiegi||"-";
+        var zalecenia = childSnapshot.val()?.zalecenia||"-";
+        rows.push(
+          [{ text: idx,alignment: 'left',fontSize: 8},{ text: "" ,fontSize: 8}],
+          [{ text: 'Data',alignment: 'left'},{ text: data ,bold:true}],
+          [{ text: 'Opis',alignment: 'left'},{ text: opis ,bold:true}],
+          [{ text: 'Zabiegi',alignment: 'left'},{ text: zabiegi ,bold:true}],
+          [{ text: 'Zalecenia',alignment: 'left'},{ text: zalecenia ,bold:true}],
+          [{ text: "",alignment: 'left'},{ text: "" ,fontSize: 20}] );
+    });
+       firebase.database().ref('users/'+firebase.auth().currentUser.uid).on('value', function(childSnapshot) {
+        {
+          var imie = childSnapshot.val()?.name||"-";
+          var nazwisko = childSnapshot.val()?.lastname||"-"; 
+          var telefon =childSnapshot.val()?.tel||"-";
+          var data="";//childSnapshot.val().DataUr;
+          var miasto=childSnapshot.val()?.city||"-";
+          var email=childSnapshot.val()?.email||"-";
+        var docDefinition={
+          pageMargins: [ 50,50,50,50 ],
+          content:[
+            
+            {text: new Date().toISOString().slice(0, 10),fontSize:9},
+            {text: " ", fontSize:10},
+            {text: "HISTORIA MEDYCZNA ", fontSize:12, bold:true, decoration:'underline'},
+            {text: " ", fontSize:20},
+            {text: "Dane właściciela ", fontSize:10,lineHeight: 1.5},
+            {canvas: [{ type: 'line', x1: 15, y1: 0, x2: 515-15, y2: 0, lineWidth: 0.5 }] },
+           {text: " ", fontSize:20},
+           {columns: [
+            { width: '*', text: '' },
+            {
+                width: 'auto',
+                
+                  table: {
+                   
+                    headerRows: 0,
+                    
+                    body: [
+            
+                      [{ text: 'Imię i nazwisko',alignment: 'left'},{ text: imie+' '+nazwisko ,bold:true}],
+                     // [{ text: 'Data urodzenia',alignment: 'left'},{ text: data ,bold:true}],
+                      [{ text: 'Miasto',alignment: 'left'},{ text: miasto ,bold:true}],
+                      [{ text: 'E-mail',alignment: 'left'},{ text: email,bold:true}],
+                      [{ text: 'Telefon kontaktowy',alignment: 'left'},{ text: telefon ,bold:true}],
+                      
+                    ]
+                  },
+                layout:'lightHorizontalLines'
+                },
+            
+            { width: '*', text: '' },
+        ]
+    },
+           
+             {text: " ", fontSize:40},
+             {text: "Historia medyczna", fontSize:10,lineHeight: 1.5},
+             {canvas: [{ type: 'line', x1: 15, y1: 0, x2: 515-15, y2: 0, lineWidth: 0.5 }] },
+             {text: " ", fontSize:20},
+             {columns: [
+              { width: '*', text: '' },
+              {
+                  width: 'auto',
+                    table: {
+                      headerRows: 0,
+                      body: rows
+                    },
+                  layout:'lightHorizontalLines'
+                  },
+              
+              { width: '*', text: '' },
+          ]
+      },
+  
+  
+         ] //content
+          }
+          pdfMake.createPdf(docDefinition).download("Ogólne_");
+          
+       }});
+      
+      }});
+  
+    }
