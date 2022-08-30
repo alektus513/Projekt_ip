@@ -18,8 +18,6 @@ firebase.auth().onAuthStateChanged(function(user) {
     document.getElementById("myid").value=firebase.auth().currentUser.uid;
     if(user != null){}
   } else {
-    // No user is signed in.
-    console.log("no one");
     document.getElementById("logowanie").style.display="block";
     document.getElementById("logout-btn").style.display="none";
     document.getElementById("signup-btn").style.display="block";
@@ -30,7 +28,7 @@ firebase.auth().onAuthStateChanged(function(user) {
     document.getElementById("mojekonto").style.display="none";
   }
 });
-pokazposty();//pokazmojeposty();
+pokazposty();
 function login(){
   var userEmail = document.getElementById("email_field").value;
   var userPass = document.getElementById("password_field").value;
@@ -38,7 +36,6 @@ function login(){
     location.reload();
     var errorCode = error.code;
     var errorMessage = error.message;
-   // window.alert("Error : " + errorMessage);
    window.alert("Błąd przy logowaniu! Sprawdź czy Twój email i hasło są poprawne"); 
   }); 
 }
@@ -70,59 +67,6 @@ function signUp(){
       var errorCode = error.code;
       var errorMessage = error.message;
     });
-    // firebase.database().ref('users/' + uid).set({
-    //   name: document.getElementById("userName").value,
-    //   lastname:document.getElementById("userLastname").value,
-    //   email: document.getElementById("userEmail").value
-    // });
-    
-    //location.reload();
-    
-    // var userFullNameFormate = /^([A-Za-z.\s_-])/;    
-    // var userEmailFormate = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    // var userPasswordFormate = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{10,}/;      
-
-    // var checkUserEmailValid = userEmail.match(userEmailFormate);
-    // var checkUserPasswordValid = userPassword.match(userPasswordFormate);
-
-    
-    // if(checkUserEmailValid == null){
-    //     return checkUserEmail();
-    // }else if(checkUserPasswordValid == null){
-    //     return checkUserPassword();
-    // }else{
-    /*    firebase.auth().createUserWithEmailAndPassword(userEmail, userPassword).then((success) => {
-            var user = firebase.auth().currentUser;
-            var uid;
-            if (user != null) {
-                uid = user.uid;
-            }
-            var firebaseRef = firebase.database().ref();
-            var userData = {
-                userEmail: userEmail,
-                userPassword: userPassword,
-            }
-            firebaseRef.child(uid).set(userData);
-            swal('Your Account Created','Your account was created successfully, you can log in now.',
-            ).then((value) => {
-                setTimeout(function(){
-                    window.location.replace("../index.html");
-                }, 1000)
-            });
-        }).catch((error) => {
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            swal({
-                type: 'error',
-                title: 'Error',
-                text: "Error",
-            })
-        });
-        firebase.auth().signInWithEmailAndPassword(userEmail, userPassword)
-       // document.getElementById("rejestracja").style.display="none";
-location.reload();
-    } */
 
     document.getElementById("rejestracja").style.display="none";
     window.alert("Rejestracja użytkownika powiodła się");
@@ -131,7 +75,6 @@ location.reload();
 function validateUserData(userEmail, userPassword, userPasswordConfirm)
 {
   if (userEmail!='' ) {
-    // sprawdzenie czy zgodne ze wzorem:
     if (!validateEmail(userEmail)){
       window.alert("Błąd przy rejestracji! Sprawdź czy Twój email jest poprawny");
       return false;
@@ -141,7 +84,6 @@ function validateUserData(userEmail, userPassword, userPasswordConfirm)
     return false;
     }
   if (userPassword!='' && userPasswordConfirm!='') {
-    // sprawdzenie ze wzorcem
     if(userPassword.length < 6) {
       window.alert("Błąd przy rejestracji! Hasło musi zawierać przynajmniej 6 znaków");
       return false;
@@ -156,27 +98,17 @@ function validateUserData(userEmail, userPassword, userPasswordConfirm)
     }
     return true;
 }
-
 function validateEmail(userEmail) {
   var userEmailFormate = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  if (userEmail.match(userEmailFormate)){
-    return true;
-  } else {
-    return false;
-  }
-}
-
+  if (userEmail.match(userEmailFormate)){ return true;
+  } else { return false;
+  }}
 function validatePassword(userPassword, passwordConfirm) {
-  //var userPasswordFormate =/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;  
-  if (userPassword === passwordConfirm) {
-    return true;
-  } else {
-    return false;
-  }
-}
+  if (userPassword === passwordConfirm) {  return true;
+  } else {   return false;
+  }}
 
 function userdata1(){
- // document.getElementById("myid").value=firebase.auth().currentUser.uid;
   firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/').on('value', function(childSnapshot) {
     {
      document.getElementById("imie").value=childSnapshot.val().name;
@@ -184,8 +116,6 @@ function userdata1(){
      document.getElementById("email").value=childSnapshot.val().email;
      document.getElementById("nrtel").value=childSnapshot.val().tel;
      document.getElementById("miasto").value=childSnapshot.val().city;
-     //console.log("usr key: "+childSnapshot.key); 
-    // console.log("usr name: "+childSnapshot.val().name);
      
     }}); 
 }
@@ -199,36 +129,6 @@ function saveuserdata(){
      });
      window.alert("Zapisano.");
 }
-// function checkUserEmail(){
-//     var userEmail = document.getElementById("userEmail");
-//     var userEmailFormate = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-//     var flag;
-//     if(userEmail.value.match(userEmailFormate)){
-//         flag = false;
-//     }else{
-//         flag = true;
-//     }
-//     if(flag){
-//        // document.getElementById("userEmailError").style.display = "block";
-//     }else{
-//        // document.getElementById("userEmailError").style.display = "none";
-//     }
-// }
-// function checkUserPassword(){
-//     var userPassword = document.getElementById("userPassword");
-//     var userPasswordFormate = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{10,}/;      
-//     var flag;
-//     if(userPassword.value.match(userPasswordFormate)){
-//         flag = false;
-//     }else{
-//         flag = true;
-//     }    
-//     if(flag){
-//       //  document.getElementById("userPasswordError").style.display = "block";
-//     }else{
-//       //  document.getElementById("userPasswordError").style.display = "none";
-//     }
-// }
 
 $(document).ready(function(){
   $("#tableSearch").on("keyup", function() {
@@ -318,8 +218,6 @@ function ogolne(pet_uid,pet_name){
   var charakter = document.getElementById("charakter");
   var upodobania = document.getElementById("upodobania");
   var dodinfo = document.getElementById("dodinfo");
-  //var kategoria =document.getElementById("kategoriainfo");
-  //var pet_uid = localStorage.getItem('pet_uid');
   firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/pets/'+pet_uid).once('value', function(snapshot) {
    // snapshot.forEach(function(childSnapshot) {
     {
@@ -336,8 +234,6 @@ function ogolne(pet_uid,pet_name){
 function zapiszogolne(){
   document.getElementById("podgladpostu").style.display='none';
   var pet_uid = localStorage.getItem('pet_uid');
-  //console.log("ogolne "+typ+" "+pet_name);
- // document.getElementById("namediv").innerText=pet_name;
   var rasa = document.getElementById("rasa").value;
   var umaszczenie = document.getElementById("umaszczenie").value;
   var charakter = document.getElementById("charakter").value;
@@ -408,7 +304,6 @@ function podglad(publikuj){
     telefon=childSnapshot.val().tel ?? "";
     danewystawiajacego="Tel: "+telefon+", "+usermail+"<br> "+childSnapshot.val().name+" "+childSnapshot.val().lastname;
   
-    // telefon = childSnapshot.val().tel;
      document.getElementById("wystawiajacy").innerHTML=danewystawiajacego;  
     }}); 
     var kategoria = document.getElementById('kategoria');
@@ -479,10 +374,6 @@ function podglad(publikuj){
   }
 }
 
-function dodajzdjecie()
-{
-}
-
 function pokazposty(){
 var lista = document.getElementById('listapostow');
 
@@ -516,7 +407,6 @@ document.getElementById("showbtn").style.display='none';
 
 }
 function pokazpostyuzytkownika(klucz){
-  //var klucz = firebase.auth().currentUser.uid;
   console.log(klucz);
   var lista = document.getElementById('listapostowuzytkownika');
   
@@ -524,7 +414,6 @@ function pokazpostyuzytkownika(klucz){
       firebase.database().ref('/posts/').once('value', function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
         {
-         // if(firebase.auth().currentUser.uid==childSnapshot.val().uid){
      if(klucz==childSnapshot.val().uid){
      
       var owner_uid = childSnapshot.val().uid;
@@ -536,7 +425,6 @@ function pokazpostyuzytkownika(klucz){
       var pet_uid = childSnapshot.val().petuid;
       var tel = childSnapshot.val().tel ?? "-";
       var mail = childSnapshot.val().mail ?? "-";
-      //console.log(pet_uid);
       var datadodania='<br>'+childSnapshot.val().datetime;
       var col, im;
       var typ=kategoria;
@@ -548,7 +436,6 @@ lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><img
 }
 }
   }); });
- // document.getElementById("showbtn").style.display='none';
   
   }
   function usunpost(del_pet_uid,pet_uid){
@@ -623,20 +510,19 @@ lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><img
     }); });
   }
   function deletefav(id){
-    console.log("do usuniecia: "+id);
     
     firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/favs/').once('value', function(snapshot) {
       snapshot.forEach(function(childSnapshot) {  
       {   
        if(childSnapshot.val().favuid==id)
        {
-        console.log("usune: "+childSnapshot.key);
         
         firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/favs/'+childSnapshot.key).remove();
        }
       }
   
-    }); });
+    }); });  location.reload();
+    
   }
   function copy() {
     var copyText = document.getElementById("myid");
@@ -647,12 +533,10 @@ lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><img
   }
   function OgolnePDF(){
   var petID=localStorage.getItem('pet_uid');
-  //console.log("key: "+petID);
   firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/pets/'+petID+"/").on('value', function(childSnapshot) {
     {
      var imiez = childSnapshot.val()?.name;
      var rasa = childSnapshot.val()?.breed ||"-";
-     //var hobby="hobby";
      var charakter =childSnapshot.val()?.character||"-";
      var umaszczenie =childSnapshot.val()?.colour||"-";
      var charakter=childSnapshot.val()?.character||"-";
@@ -664,7 +548,7 @@ lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><img
          var imie = childSnapshot.val().name;
          var nazwisko = childSnapshot.val().lastname; 
          var telefon =childSnapshot.val().tel;
-         var data="";//childSnapshot.val().DataUr;
+         var data="";
          var miasto=childSnapshot.val().city;
          var email=childSnapshot.val()?.email;
         var docDefinition={
@@ -689,8 +573,7 @@ lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><img
                     
                     body: [
             
-                      [{ text: 'Imię',alignment: 'left'},{ text: imie ,bold:true}],
-                     // [{ text: 'Data urodzenia',alignment: 'left'},{ text: data ,bold:true}],
+                      [{ text: 'Imię i nazwisko',alignment: 'left'},{ text: imie+' '+nazwisko ,bold:true}],
                       [{ text: 'Miasto',alignment: 'left'},{ text: miasto ,bold:true}],
                       [{ text: 'E-mail',alignment: 'left'},{ text: email,bold:true}],
                       [{ text: 'Telefon kontaktowy',alignment: 'left'},{ text: telefon ,bold:true}],
@@ -732,28 +615,22 @@ lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><img
         ]
     },
 
-    
-
-
-
-
-
        ] //content
         }
-        pdfMake.createPdf(docDefinition).download("Ogólne_"+nazwisko);
+        pdfMake.createPdf(docDefinition).download("Ogólne_"+imiez);
         
      }});
       
     }});
-   
-
-  
 
   }
+
   function OgolnePDF2(){
     var petID=localStorage.getItem('pet_uid');
     var rows=[]; var idx=0;
-   // console.log("key: "+petID);
+   firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/pets/'+petID+"/").on('value', function(childSnapshot) {
+    {
+      var imiez = childSnapshot.val()?.name;
     firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/pets/'+petID+"/Med/").once('value', function(snapshot) {
       {
         snapshot.forEach(function(childSnapshot) {  
@@ -776,7 +653,7 @@ lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><img
           var imie = childSnapshot.val()?.name||"-";
           var nazwisko = childSnapshot.val()?.lastname||"-"; 
           var telefon =childSnapshot.val()?.tel||"-";
-          var data="";//childSnapshot.val().DataUr;
+          var data="";
           var miasto=childSnapshot.val()?.city||"-";
           var email=childSnapshot.val()?.email||"-";
         var docDefinition={
@@ -785,7 +662,7 @@ lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><img
             
             {text: new Date().toISOString().slice(0, 10),fontSize:9},
             {text: " ", fontSize:10},
-            {text: "HISTORIA MEDYCZNA ", fontSize:12, bold:true, decoration:'underline'},
+            {text: "HISTORIA MEDYCZNA: "+imiez, fontSize:12, bold:true, decoration:'underline'},
             {text: " ", fontSize:20},
             {text: "Dane właściciela ", fontSize:10,lineHeight: 1.5},
             {canvas: [{ type: 'line', x1: 15, y1: 0, x2: 515-15, y2: 0, lineWidth: 0.5 }] },
@@ -802,7 +679,6 @@ lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><img
                     body: [
             
                       [{ text: 'Imię i nazwisko',alignment: 'left'},{ text: imie+' '+nazwisko ,bold:true}],
-                     // [{ text: 'Data urodzenia',alignment: 'left'},{ text: data ,bold:true}],
                       [{ text: 'Miasto',alignment: 'left'},{ text: miasto ,bold:true}],
                       [{ text: 'E-mail',alignment: 'left'},{ text: email,bold:true}],
                       [{ text: 'Telefon kontaktowy',alignment: 'left'},{ text: telefon ,bold:true}],
@@ -835,13 +711,13 @@ lista.innerHTML=lista.innerHTML+"<div class='card'><div class='card-header'><img
           ]
       },
   
-  
          ] //content
           }
-          pdfMake.createPdf(docDefinition).download("Ogólne_");
+          pdfMake.createPdf(docDefinition).download("Historia_med_"+imiez);
           
        }});
       
       }});
+    }});
   
     }
